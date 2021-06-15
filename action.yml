@@ -2,10 +2,14 @@ name: 'Your name here'
 description: 'Provide a description here'
 author: 'Your name or organization here'
 inputs:
-  milliseconds: # change this
+  channel:
+    required: false
+    description: 'Change to unstable to use the latest RC'
+    default: 'stable'
+  enrolment-key:
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: 'The enrolment key to use when enrolling the system'
 runs:
   using: 'node12'
   main: 'dist/index.js'
+  post: 'dist/post.js'
