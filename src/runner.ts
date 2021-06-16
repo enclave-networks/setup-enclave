@@ -1,5 +1,5 @@
+import { exec } from '@actions/exec'
 import { HttpClient } from '@actions/http-client'
-import {exec, spawn} from 'child_process'
 import {readFileSync} from 'fs'
 import path from 'path'
 import { FabricStatus } from './statusTypes'
@@ -14,15 +14,15 @@ export interface IEnclavePid {
 export async function spawnEnclave(
   enrolmentKey: string
 ): Promise<void> {
-  return new Promise<void>((resolve, reject) => {
+
     let envCopy: {[id: string]: string} = {}
     let envName: string
     for (envName in process.env) {
-      var envVal = process.env[envName]
+        var envVal = process.env[envName]
 
-      if (envVal) {
+        if (envVal) {
         envCopy[envName] = envVal
-      }
+        }
     }
 
     envCopy['ENCLAVE_ENROLMENT_KEY'] = enrolmentKey
@@ -30,20 +30,7 @@ export async function spawnEnclave(
     // Locate the spawn script.
     var spawnScript = path.join(__dirname, '..', '..', 'external', 'spawn-linux.sh');
 
-    try {
-      var childProcess = spawn(spawnScript, {
-        env: envCopy,
-        detached: true,
-        stdio: 'ignore'
-      });
-
-      childProcess.unref();
-
-      resolve();
-    } catch (err) {
-      reject(err)
-    }
-  })
+    await exec(spawnScript, [], { env: envCopy });
 }
 
 export async function getEnclaveInfo(pidInfo: IEnclavePid): Promise<{id: string; localAddress: string}> {

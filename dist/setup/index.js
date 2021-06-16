@@ -5295,38 +5295,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getEnclavePidInfo = exports.getEnclaveInfo = exports.spawnEnclave = void 0;
+const exec_1 = __webpack_require__(514);
 const http_client_1 = __webpack_require__(925);
-const child_process_1 = __webpack_require__(129);
 const fs_1 = __webpack_require__(747);
 const path_1 = __importDefault(__webpack_require__(622));
 ;
 function spawnEnclave(enrolmentKey) {
     return __awaiter(this, void 0, void 0, function* () {
-        return new Promise((resolve, reject) => {
-            let envCopy = {};
-            let envName;
-            for (envName in process.env) {
-                var envVal = process.env[envName];
-                if (envVal) {
-                    envCopy[envName] = envVal;
-                }
+        let envCopy = {};
+        let envName;
+        for (envName in process.env) {
+            var envVal = process.env[envName];
+            if (envVal) {
+                envCopy[envName] = envVal;
             }
-            envCopy['ENCLAVE_ENROLMENT_KEY'] = enrolmentKey;
-            // Locate the spawn script.
-            var spawnScript = path_1.default.join(__dirname, '..', '..', 'external', 'spawn-linux.sh');
-            try {
-                var childProcess = child_process_1.spawn(spawnScript, {
-                    env: envCopy,
-                    detached: true,
-                    stdio: 'ignore'
-                });
-                childProcess.unref();
-                resolve();
-            }
-            catch (err) {
-                reject(err);
-            }
-        });
+        }
+        envCopy['ENCLAVE_ENROLMENT_KEY'] = enrolmentKey;
+        // Locate the spawn script.
+        var spawnScript = path_1.default.join(__dirname, '..', '..', 'external', 'spawn-linux.sh');
+        yield exec_1.exec(spawnScript, [], { env: envCopy });
     });
 }
 exports.spawnEnclave = spawnEnclave;
