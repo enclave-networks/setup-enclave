@@ -5271,25 +5271,8 @@ function run() {
                     throw new Error('Could not configure DNS');
                 }
             }
-            /*  // Write shell script to temp folder that launches enclave, then add that folder to the path.
-            const script =
-        `#!/bin/bash
-        export DOTNET_BUNDLE_EXTRACT_BASE_DIR=${process.env.RUNNER_TEMP}/.net
-        ${enclaveBinary} "$@"
-        `;
-        
-            const scriptFolder = `${process.env.RUNNER_TEMP}/enclave-launcher`;
-        
-            mkdirP(scriptFolder);
-        
-            core.info("Writing launcher script")
-        
-            writeFileSync(`${scriptFolder}/enclave`, script);
-        
-            chmodSync(`${scriptFolder}/enclave`, 755); */
             core.info('Adding enclave to path');
             core.addPath(extractFolder);
-            exec_1.exec(`ls -la ${extractFolder}`);
             core.info('Enclave is ready');
         }
         catch (error) {
@@ -5383,7 +5366,7 @@ function getEnclaveInfo(pidInfo) {
                 throw new Error('Not ready');
             }
             catch (err) {
-                core.warning('Could not load enclave status');
+                core.warning('Could not load enclave status yet...');
                 attemptCounter++;
                 if (attemptCounter < 5) {
                     yield sleep(3000);
@@ -5404,7 +5387,7 @@ function getEnclavePidInfo() {
                 return pidObject;
             }
             catch (err) {
-                core.warning('Could not read enclave PID');
+                core.warning('Could not read enclave PID yet...');
                 attemptCounter++;
                 if (attemptCounter < 5) {
                     yield sleep(3000);

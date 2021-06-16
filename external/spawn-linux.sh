@@ -7,8 +7,6 @@ echo -e "Spawning Enclave background process"
 sudo chown runner: $ENCLAVE_BINARY
 sudo chmod 755 $ENCLAVE_BINARY
 
-env
-
 export DOTNET_BUNDLE_EXTRACT_BASE_DIR=$RUNNER_TEMP/enclave-daemon-extract
 # Launch enclave, daemonised.
 sudo -E $ENCLAVE_BINARY run </dev/null &>/dev/null &

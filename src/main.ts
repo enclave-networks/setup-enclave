@@ -128,29 +128,9 @@ async function run(): Promise<void> {
         throw new Error('Could not configure DNS');
       }
     }
-
-    /*  // Write shell script to temp folder that launches enclave, then add that folder to the path.
-    const script = 
-`#!/bin/bash
-export DOTNET_BUNDLE_EXTRACT_BASE_DIR=${process.env.RUNNER_TEMP}/.net
-${enclaveBinary} "$@"
-`;
-
-    const scriptFolder = `${process.env.RUNNER_TEMP}/enclave-launcher`;
-
-    mkdirP(scriptFolder);
-
-    core.info("Writing launcher script")
-
-    writeFileSync(`${scriptFolder}/enclave`, script);
-
-    chmodSync(`${scriptFolder}/enclave`, 755); */
-
     core.info('Adding enclave to path');
 
     core.addPath(extractFolder);
-
-    exec(`ls -la ${extractFolder}`);
 
     core.info('Enclave is ready');
   } catch (error) {
