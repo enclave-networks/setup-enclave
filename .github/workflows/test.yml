@@ -33,7 +33,7 @@ jobs:
       - name: Get status
         run: |
           env
-          whereis enclave
-          sudo enclave status
+          whereis enclave          
+          enclave status
 
       - run: enclave waitfor discover.enclave.io

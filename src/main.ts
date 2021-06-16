@@ -128,6 +128,8 @@ async function run(): Promise<void> {
       }
     }
 
+    core.exportVariable("DOTNET_BUNDLE_EXTRACT_BASE_DIR", `${process.env.HOME}/.net`);
+
     core.info("Enclave is ready");
 
   } catch (error) {
