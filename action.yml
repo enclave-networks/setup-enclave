@@ -10,6 +10,6 @@ inputs:
     required: true
     description: 'The enrolment key to use when enrolling the system'
 runs:
-  using: 'node14'
+  using: 'node12'
   main: 'dist/setup/index.js'
   post: 'dist/post/index.js'
