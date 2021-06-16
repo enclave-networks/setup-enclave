@@ -62,17 +62,17 @@ export async function getEnclaveInfo(pidInfo: IEnclavePid): Promise<{id: string;
         }
         catch (err)
         {
-            core.error(err);
+            core.warning("Could not load enclave status");
 
             attemptCounter++;
 
-            if (attemptCounter < 3)
+            if (attemptCounter < 5)
             {
-                await sleep(1000);
+                await sleep(3000);
             }
             else 
             {
-                throw new Error("Could not retrieve Enclave info");
+                throw new Error("Could not load enclave status");
             }
         }
     }
@@ -93,13 +93,13 @@ export async function getEnclavePidInfo() : Promise<IEnclavePid>
         }
         catch (err)
         {
-            core.error(err);
+            core.warning("Could not read enclave PID");
 
             attemptCounter++;
 
             if (attemptCounter < 5)
             {
-                await sleep(4000);
+                await sleep(3000);
             }
             else 
             {

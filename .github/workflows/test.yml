@@ -30,6 +30,9 @@ jobs:
       - run: cat /var/log/enclave/*
         if: always()
 
+      - name: Print env
+        run: env
+
       - run: enclave status
 
       - run: enclave waitfor discover.enclave.io

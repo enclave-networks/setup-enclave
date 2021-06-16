@@ -5363,13 +5363,13 @@ function getEnclaveInfo(pidInfo) {
                 throw new Error("Not ready");
             }
             catch (err) {
-                core.error(err);
+                core.warning("Could not load enclave status");
                 attemptCounter++;
-                if (attemptCounter < 3) {
-                    yield sleep(1000);
+                if (attemptCounter < 5) {
+                    yield sleep(3000);
                 }
                 else {
-                    throw new Error("Could not retrieve Enclave info");
+                    throw new Error("Could not load enclave status");
                 }
             }
         }
@@ -5386,10 +5386,10 @@ function getEnclavePidInfo() {
                 return pidObject;
             }
             catch (err) {
-                core.error(err);
+                core.warning("Could not read enclave PID");
                 attemptCounter++;
                 if (attemptCounter < 5) {
-                    yield sleep(4000);
+                    yield sleep(3000);
                 }
                 else {
                     throw "Could not load PID file";
