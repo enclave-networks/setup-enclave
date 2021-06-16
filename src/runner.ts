@@ -1,49 +1,46 @@
-import { exec, spawn } from "child_process";
-import { readFile } from "fs/promises";
+import {exec, spawn} from 'child_process'
+import {readFile} from 'fs/promises'
 
-export async function spawnEnclave(enclavePath: string, enrolmentKey: string) : Promise<number>
-{
-    return new Promise<number>((resolve, reject) => {
+export async function spawnEnclave(
+  enclavePath: string,
+  enrolmentKey: string
+): Promise<number> {
+  return new Promise<number>((resolve, reject) => {
+    let envCopy: {[id: string]: string} = {}
+    let envName: string
+    for (envName in process.env) {
+      var envVal = process.env[envName]
 
-        let envCopy: { [id: string]: string; } = {};
-        let envName: string;
-        for (envName in process.env) 
-        { 
-            var envVal = process.env[envName];
+      if (envVal) {
+        envCopy[envName] = envVal
+      }
+    }
 
-            if (envVal)
-            {
-                envCopy[envName] = envVal;
-            }
-        }
+    envCopy['ENCLAVE_ENROLMENT_KEY'] = enrolmentKey
 
-        envCopy['ENCLAVE_ENROLMENT_KEY'] = enrolmentKey;
+    try {
+      var childProcess = spawn(enclavePath, ['run'], {
+        env: envCopy,
+        detached: true,
+        stdio: 'ignore'
+      })
 
-        try {
-            var childProcess = spawn(enclavePath, ['run'], {
-                env: envCopy,
-                detached: true,
-                stdio: 'ignore',
-            });
+      childProcess.unref()
 
-            childProcess.unref();
-            
-            resolve(childProcess.pid);
-        }
-        catch(err)
-        {
-            reject(err);
-        }
-
-    });
+      resolve(childProcess.pid)
+    } catch (err) {
+      reject(err)
+    }
+  })
 }
 
-export function GetEnclaveInfo(enclaveBinaryPath: string) : Promise<{ Id: string, LocalAddress: string }>
-{
-    return new Promise<{ Id: string, LocalAddress: string }>(async (resolve, reject) => {
-
-        // Read the profile json.
-        var enclaveProfile = await readFile('/etc/enclave/profiles/');
-
-    });
+export function GetEnclaveInfo(
+  enclaveBinaryPath: string
+): Promise<{Id: string; LocalAddress: string}> {
+  return new Promise<{Id: string; LocalAddress: string}>(
+    async (resolve, reject) => {
+      // Read the profile json.
+      var enclaveProfile = await readFile('/etc/enclave/profiles/')
+    }
+  )
 }

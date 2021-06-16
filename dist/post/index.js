@@ -430,6 +430,10 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             // Clean-up & Revoke
+            const pid = parseInt(core.getState('ENCLAVE_PID'));
+            // var orgId = core.getInput('organisation')
+            // var apiKey = core.getInput('apiKey')
+            process.kill(pid, 'SIGINT');
         }
         catch (error) {
             core.setFailed(error.message);

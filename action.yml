@@ -1,6 +1,6 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'enclave-setup-action'
+description: 'Sets up Enclave in a GitHub action to allow connectivity to your Enclave network.'
+author: 'Enclave Networks'
 inputs:
   channel:
     required: false
@@ -10,6 +10,6 @@ inputs:
     required: true
     description: 'The enrolment key to use when enrolling the system'
 runs:
-  using: 'node12'
-  main: 'dist/index.js'
-  post: 'dist/post.js'
+  using: 'node14'
+  main: 'dist/setup/index.js'
+  post: 'dist/post/index.js'
