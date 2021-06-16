@@ -129,11 +129,11 @@ async function run(): Promise<void> {
     // Write shell script to temp folder that launches enclave, then add that folder to the path.
     const script = 
 `#!/bin/bash
-export DOTNET_BUNDLE_EXTRACT_BASE_DIR=${process.env.TEMP}/.net
+export DOTNET_BUNDLE_EXTRACT_BASE_DIR=${process.env.TMPDIR}/.net
 ${enclaveBinary} "$@"
 `;
 
-    const scriptFolder = `${process.env.TEMP}/enclave-launcher`;
+    const scriptFolder = `${process.env.TMPDIR}/enclave-launcher`;
 
     mkdirP(scriptFolder);
 
