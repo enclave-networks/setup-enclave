@@ -58,10 +58,12 @@ export async function getEnclaveInfo(pidInfo: IEnclavePid): Promise<{id: string;
                 return { id: status.Profile.Certificate.SubjectDistinguishedName, localAddress:  status.Profile.VirtualAddress };
             }
 
-            throw "Not ready";
+            throw new Error("Not ready");
         }
         catch (err)
         {
+            core.error(err);
+
             attemptCounter++;
 
             if (attemptCounter < 3)
@@ -70,7 +72,7 @@ export async function getEnclaveInfo(pidInfo: IEnclavePid): Promise<{id: string;
             }
             else 
             {
-                throw "Could not retrieve Enclave info";
+                throw new Error("Could not retrieve Enclave info");
             }
         }
     }

@@ -2777,15 +2777,16 @@ function getEnclaveInfo(pidInfo) {
                 if (status && status.Profile.VirtualAddress) {
                     return { id: status.Profile.Certificate.SubjectDistinguishedName, localAddress: status.Profile.VirtualAddress };
                 }
-                throw "Not ready";
+                throw new Error("Not ready");
             }
             catch (err) {
+                core.error(err);
                 attemptCounter++;
                 if (attemptCounter < 3) {
                     yield sleep(1000);
                 }
                 else {
-                    throw "Could not retrieve Enclave info";
+                    throw new Error("Could not retrieve Enclave info");
                 }
             }
         }
