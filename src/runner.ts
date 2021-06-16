@@ -16,17 +16,17 @@ export async function spawnEnclave(
   enrolmentKey: string
 ): Promise<number> {
 
-    let envCopy: {[id: string]: string} = {}
-    let envName: string
+    let envCopy: {[id: string]: string} = {};
+    let envName: string;
     for (envName in process.env) {
-        var envVal = process.env[envName]
+        var envVal = process.env[envName];
 
         if (envVal) {
-        envCopy[envName] = envVal
+            envCopy[envName] = envVal;
         }
     }
 
-    envCopy['ENCLAVE_ENROLMENT_KEY'] = enrolmentKey
+    envCopy['ENCLAVE_ENROLMENT_KEY'] = enrolmentKey;
 
     // Locate the spawn script.
     var spawnScript = path.join(__dirname, '..', '..', 'external', 'spawn-linux.sh');

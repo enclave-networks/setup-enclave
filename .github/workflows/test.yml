@@ -27,6 +27,9 @@ jobs:
           apiKey: '${{secrets.TEST_API_KEY}}'
           orgId: 'a09a8d4dd4ea4c12a33a51e3effac9fa'
 
+      - run: cat /var/log/enclave/*
+        if: always()
+
       - run: enclave status
 
       - run: enclave waitfor discover.enclave.io
