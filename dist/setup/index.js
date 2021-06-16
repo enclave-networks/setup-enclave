@@ -5217,20 +5217,20 @@ function run() {
             const manifestClient = new http_client_1.HttpClient('enclave-setup');
             const downloadedManifest = (yield manifestClient.getJson(manifest)).result;
             if (!downloadedManifest) {
-                core.setFailed("Could not download manifest");
+                core.setFailed('Could not download manifest');
                 return;
             }
-            const version = downloadedManifest.ReleaseVersions.reverse().find(version => {
-                return version.ReleaseType === releaseVersion;
+            const version = downloadedManifest.ReleaseVersions.reverse().find(v => {
+                return v.ReleaseType === releaseVersion;
             });
             if (!version) {
-                core.setFailed("Could not locate Enclave version in manifest.");
+                core.setFailed('Could not locate Enclave version in manifest.');
                 return;
             }
             core.info(`Using Enclave ${version.MajorVersion}.${version.MinorVersion}.${version.BuildVersion}.${version.RevisionVersion}`);
             const selectedPackage = linux.choosePackage(version === null || version === void 0 ? void 0 : version.Packages);
             if (!selectedPackage) {
-                core.setFailed("Could not determine Enclave package from version.");
+                core.setFailed('Could not determine Enclave package from version.');
                 return;
             }
             const downloadUrl = selectedPackage.Url;
@@ -5246,49 +5246,51 @@ function run() {
             }
             const enclaveBinary = `${extractFolder}/enclave`;
             core.info(`Enclave Agent extracted at ${enclaveBinary}`);
-            core.info("Starting enclave");
+            core.info('Starting enclave');
             const enclaveSpawnExitCode = yield runner_1.spawnEnclave(enclaveBinary, core.getInput('enrolment-key'));
             if (enclaveSpawnExitCode !== 0) {
                 core.setFailed(`Failed to spawn enclave daemon: ${enclaveSpawnExitCode}`);
                 return;
             }
-            core.debug("Reading Enclave PID");
+            core.debug('Reading Enclave PID');
             const enclavePid = yield runner_1.getEnclavePidInfo();
             core.debug(`PID: ${JSON.stringify(enclavePid)}`);
-            core.debug("Reading Enclave Status");
+            core.debug('Reading Enclave Status');
             // Now get the Enclave info.
             const enclaveInfo = yield runner_1.getEnclaveInfo(enclavePid);
             core.debug(`Enclave Status Info: ${JSON.stringify(enclaveInfo)}`);
             // Use the virtual address to configure DNS.
             if (os_1.platform() === 'linux') {
-                core.info("Configuring local DNS");
+                core.info('Configuring local DNS');
                 // Locate the spawn script.
                 const dnsScript = path_1.default.join(__dirname, '..', '..', 'external', 'configure-dns-linux.sh');
-                const dnsConfigResult = yield exec_1.exec(dnsScript, [], { env: { ENCLAVE_ADDR: enclaveInfo.localAddress } });
+                const dnsConfigResult = yield exec_1.exec(dnsScript, [], {
+                    env: { ENCLAVE_ADDR: enclaveInfo.localAddress }
+                });
                 if (dnsConfigResult !== 0) {
-                    throw "Could not configure DNS";
+                    throw new Error('Could not configure DNS');
                 }
             }
             /*  // Write shell script to temp folder that launches enclave, then add that folder to the path.
-             const script =
-         `#!/bin/bash
-         export DOTNET_BUNDLE_EXTRACT_BASE_DIR=${process.env.RUNNER_TEMP}/.net
-         ${enclaveBinary} "$@"
-         `;
-         
-             const scriptFolder = `${process.env.RUNNER_TEMP}/enclave-launcher`;
-         
-             mkdirP(scriptFolder);
-         
-             core.info("Writing launcher script")
-         
-             writeFileSync(`${scriptFolder}/enclave`, script);
-         
-             chmodSync(`${scriptFolder}/enclave`, 755); */
-            core.info("Adding enclave to path");
+            const script =
+        `#!/bin/bash
+        export DOTNET_BUNDLE_EXTRACT_BASE_DIR=${process.env.RUNNER_TEMP}/.net
+        ${enclaveBinary} "$@"
+        `;
+        
+            const scriptFolder = `${process.env.RUNNER_TEMP}/enclave-launcher`;
+        
+            mkdirP(scriptFolder);
+        
+            core.info("Writing launcher script")
+        
+            writeFileSync(`${scriptFolder}/enclave`, script);
+        
+            chmodSync(`${scriptFolder}/enclave`, 755); */
+            core.info('Adding enclave to path');
             core.addPath(extractFolder);
             exec_1.exec(`ls -la ${extractFolder}`);
-            core.info("Enclave is ready");
+            core.info('Enclave is ready');
         }
         catch (error) {
             core.setFailed(error.message);
@@ -5343,13 +5345,12 @@ const exec_1 = __webpack_require__(514);
 const http_client_1 = __webpack_require__(925);
 const fs_1 = __webpack_require__(747);
 const path_1 = __importDefault(__webpack_require__(622));
-;
 function spawnEnclave(enclaveBinary, enrolmentKey) {
     return __awaiter(this, void 0, void 0, function* () {
-        let envCopy = {};
+        const envCopy = {};
         let envName;
         for (envName in process.env) {
-            var envVal = process.env[envName];
+            const envVal = process.env[envName];
             if (envVal) {
                 envCopy[envName] = envVal;
             }
@@ -5357,7 +5358,7 @@ function spawnEnclave(enclaveBinary, enrolmentKey) {
         envCopy['ENCLAVE_ENROLMENT_KEY'] = enrolmentKey;
         envCopy['ENCLAVE_BINARY'] = enclaveBinary;
         // Locate the spawn script.
-        var spawnScript = path_1.default.join(__dirname, '..', '..', 'external', 'spawn-linux.sh');
+        const spawnScript = path_1.default.join(__dirname, '..', '..', 'external', 'spawn-linux.sh');
         return yield exec_1.exec(spawnScript, [], { env: envCopy });
     });
 }
@@ -5365,59 +5366,58 @@ exports.spawnEnclave = spawnEnclave;
 function getEnclaveInfo(pidInfo) {
     return __awaiter(this, void 0, void 0, function* () {
         let attemptCounter = 0;
-        while (true) {
+        while (attemptCounter < 5) {
             try {
-                let authHeader = { ['X-Auth-Token']: pidInfo.api_key };
+                const authHeader = { ['X-Auth-Token']: pidInfo.api_key };
                 // Now call the API to get the status.
-                let http = new http_client_1.HttpClient('enclave-actions');
+                const http = new http_client_1.HttpClient('enclave-actions');
                 const apiResponse = yield http.getJson(`${pidInfo.uri}/fabric/status`, authHeader);
                 const status = apiResponse.result;
                 // Only when ready...
                 if (status && status.Profile.VirtualAddress) {
-                    return { id: status.Profile.Certificate.SubjectDistinguishedName, localAddress: status.Profile.VirtualAddress };
+                    return {
+                        id: status.Profile.Certificate.SubjectDistinguishedName,
+                        localAddress: status.Profile.VirtualAddress
+                    };
                 }
-                throw new Error("Not ready");
+                throw new Error('Not ready');
             }
             catch (err) {
-                core.warning("Could not load enclave status");
+                core.warning('Could not load enclave status');
                 attemptCounter++;
                 if (attemptCounter < 5) {
                     yield sleep(3000);
                 }
-                else {
-                    throw new Error("Could not load enclave status");
-                }
             }
         }
+        throw new Error('Could not load enclave status');
     });
 }
 exports.getEnclaveInfo = getEnclaveInfo;
 function getEnclavePidInfo() {
     return __awaiter(this, void 0, void 0, function* () {
         let attemptCounter = 0;
-        while (true) {
+        while (attemptCounter < 5) {
             try {
                 const pidContents = fs_1.readFileSync('/etc/enclave/pid/Universe.profile.pid', 'utf-8');
                 const pidObject = JSON.parse(pidContents);
                 return pidObject;
             }
             catch (err) {
-                core.warning("Could not read enclave PID");
+                core.warning('Could not read enclave PID');
                 attemptCounter++;
                 if (attemptCounter < 5) {
                     yield sleep(3000);
                 }
-                else {
-                    throw "Could not load PID file";
-                }
             }
         }
+        throw new Error('Could not load PID file');
     });
 }
 exports.getEnclavePidInfo = getEnclavePidInfo;
 function sleep(ms) {
     return __awaiter(this, void 0, void 0, function* () {
-        return new Promise((resolve) => {
+        return new Promise(resolve => {
             setTimeout(resolve, ms);
         });
     });

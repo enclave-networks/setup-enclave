@@ -2666,28 +2666,30 @@ function run() {
         try {
             const orgId = core.getInput('orgId');
             const apiKey = core.getInput('apiKey');
-            core.info("Stopping Enclave Agent...");
+            core.info('Stopping Enclave Agent...');
             const enclavePidInfo = yield runner_1.getEnclavePidInfo();
             const enclaveInfo = yield runner_1.getEnclaveInfo(enclavePidInfo);
             // Locate the stop script.
-            var stopScript = path_1.default.join(__dirname, '..', '..', 'external', 'terminate-linux.sh');
+            const stopScript = path_1.default.join(__dirname, '..', '..', 'external', 'terminate-linux.sh');
             // Try to stop it.
-            var exitCode = yield exec_1.exec(stopScript, [], { env: { ENCLAVE_PID: enclavePidInfo.pid.toString() } });
+            const exitCode = yield exec_1.exec(stopScript, [], {
+                env: { ENCLAVE_PID: enclavePidInfo.pid.toString() }
+            });
             if (exitCode === 0) {
-                core.info("Stopped Enclave Agent.");
+                core.info('Stopped Enclave Agent.');
             }
             else {
                 core.error(`Could not gracefully stop Enclave Agent. Exit code: ${exitCode}.`);
             }
-            var bearerHandler = new httpAuth.BearerCredentialHandler(apiKey);
-            var httpClient = new http_client_1.HttpClient('enclave-setup', [bearerHandler]);
-            core.info("Revoking the Enclave System from your account...");
+            const bearerHandler = new httpAuth.BearerCredentialHandler(apiKey);
+            const httpClient = new http_client_1.HttpClient('enclave-setup', [bearerHandler]);
+            core.info('Revoking the Enclave System from your account...');
             const result = yield httpClient.del(`https://api.enclave.io/org/${orgId}/systems/${enclaveInfo.id}`);
-            if (result.message.statusCode == 200) {
-                core.info("Successfully revoked Enclave System from your account");
+            if (result.message.statusCode === 200) {
+                core.info('Successfully revoked Enclave System from your account');
             }
             else {
-                core.error("Failed to revoke Enclave System from your account:");
+                core.error('Failed to revoke Enclave System from your account:');
                 core.error(yield result.readBody());
             }
         }
@@ -2744,13 +2746,12 @@ const exec_1 = __webpack_require__(514);
 const http_client_1 = __webpack_require__(925);
 const fs_1 = __webpack_require__(747);
 const path_1 = __importDefault(__webpack_require__(622));
-;
 function spawnEnclave(enclaveBinary, enrolmentKey) {
     return __awaiter(this, void 0, void 0, function* () {
-        let envCopy = {};
+        const envCopy = {};
         let envName;
         for (envName in process.env) {
-            var envVal = process.env[envName];
+            const envVal = process.env[envName];
             if (envVal) {
                 envCopy[envName] = envVal;
             }
@@ -2758,7 +2759,7 @@ function spawnEnclave(enclaveBinary, enrolmentKey) {
         envCopy['ENCLAVE_ENROLMENT_KEY'] = enrolmentKey;
         envCopy['ENCLAVE_BINARY'] = enclaveBinary;
         // Locate the spawn script.
-        var spawnScript = path_1.default.join(__dirname, '..', '..', 'external', 'spawn-linux.sh');
+        const spawnScript = path_1.default.join(__dirname, '..', '..', 'external', 'spawn-linux.sh');
         return yield exec_1.exec(spawnScript, [], { env: envCopy });
     });
 }
@@ -2766,59 +2767,58 @@ exports.spawnEnclave = spawnEnclave;
 function getEnclaveInfo(pidInfo) {
     return __awaiter(this, void 0, void 0, function* () {
         let attemptCounter = 0;
-        while (true) {
+        while (attemptCounter < 5) {
             try {
-                let authHeader = { ['X-Auth-Token']: pidInfo.api_key };
+                const authHeader = { ['X-Auth-Token']: pidInfo.api_key };
                 // Now call the API to get the status.
-                let http = new http_client_1.HttpClient('enclave-actions');
+                const http = new http_client_1.HttpClient('enclave-actions');
                 const apiResponse = yield http.getJson(`${pidInfo.uri}/fabric/status`, authHeader);
                 const status = apiResponse.result;
                 // Only when ready...
                 if (status && status.Profile.VirtualAddress) {
-                    return { id: status.Profile.Certificate.SubjectDistinguishedName, localAddress: status.Profile.VirtualAddress };
+                    return {
+                        id: status.Profile.Certificate.SubjectDistinguishedName,
+                        localAddress: status.Profile.VirtualAddress
+                    };
                 }
-                throw new Error("Not ready");
+                throw new Error('Not ready');
             }
             catch (err) {
-                core.warning("Could not load enclave status");
+                core.warning('Could not load enclave status');
                 attemptCounter++;
                 if (attemptCounter < 5) {
                     yield sleep(3000);
                 }
-                else {
-                    throw new Error("Could not load enclave status");
-                }
             }
         }
+        throw new Error('Could not load enclave status');
     });
 }
 exports.getEnclaveInfo = getEnclaveInfo;
 function getEnclavePidInfo() {
     return __awaiter(this, void 0, void 0, function* () {
         let attemptCounter = 0;
-        while (true) {
+        while (attemptCounter < 5) {
             try {
                 const pidContents = fs_1.readFileSync('/etc/enclave/pid/Universe.profile.pid', 'utf-8');
                 const pidObject = JSON.parse(pidContents);
                 return pidObject;
             }
             catch (err) {
-                core.warning("Could not read enclave PID");
+                core.warning('Could not read enclave PID');
                 attemptCounter++;
                 if (attemptCounter < 5) {
                     yield sleep(3000);
                 }
-                else {
-                    throw "Could not load PID file";
-                }
             }
         }
+        throw new Error('Could not load PID file');
     });
 }
 exports.getEnclavePidInfo = getEnclavePidInfo;
 function sleep(ms) {
     return __awaiter(this, void 0, void 0, function* () {
-        return new Promise((resolve) => {
+        return new Promise(resolve => {
             setTimeout(resolve, ms);
         });
     });
