@@ -1,3 +1,4 @@
+import * as core from '@actions/core'
 import { exec } from '@actions/exec'
 import { HttpClient } from '@actions/http-client'
 import {readFileSync} from 'fs'
@@ -88,6 +89,8 @@ export async function getEnclavePidInfo() : Promise<IEnclavePid>
         }
         catch (err)
         {
+            core.error(err);
+
             attemptCounter++;
 
             if (attemptCounter < 3)
