@@ -69,6 +69,7 @@ async function run(): Promise<void> {
 
     if (process.platform === 'linux')
     {
+      core.info(`Downloading Enclave from ${downloadUrl}`);
       const downloadedPath = await tc.downloadTool(downloadUrl);
 
       extractFolder = await tc.extractTar(downloadedPath);
@@ -79,6 +80,8 @@ async function run(): Promise<void> {
     }
 
     const enclaveBinary = `${extractFolder}/enclave`;
+
+    core.info(`Enclave Agent extracted at ${enclaveBinary}`);
 
     // Add enclave to the path.
     core.addPath(`${extractFolder}`);
