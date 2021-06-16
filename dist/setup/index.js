@@ -5255,9 +5255,13 @@ function run() {
                 core.setFailed(`Failed to spawn enclave daemon: ${enclaveSpawnExitCode}`);
                 return;
             }
+            core.debug("Reading Enclave PID");
             const enclavePid = yield runner_1.getEnclavePidInfo();
+            core.debug(`PID: ${JSON.stringify(enclavePid)}`);
+            core.debug("Reading Enclave Status");
             // Now get the Enclave info.
             const enclaveInfo = yield runner_1.getEnclaveInfo(enclavePid);
+            core.debug(`Enclave Status Info: ${JSON.stringify(enclaveInfo)}`);
             // Use the virtual address to configure DNS.
             if (os_1.platform() === 'linux') {
                 core.info("Configuring local DNS");

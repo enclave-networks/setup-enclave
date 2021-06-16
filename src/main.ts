@@ -100,10 +100,18 @@ async function run(): Promise<void> {
       return;
     }
 
+    core.debug("Reading Enclave PID");
+
     const enclavePid = await getEnclavePidInfo();
+
+    core.debug(`PID: ${JSON.stringify(enclavePid)}`);
+
+    core.debug("Reading Enclave Status");
 
     // Now get the Enclave info.
     const enclaveInfo = await getEnclaveInfo(enclavePid);
+
+    core.debug(`Enclave Status Info: ${JSON.stringify(enclaveInfo)}`);
 
     // Use the virtual address to configure DNS.
     if (platform() === 'linux')

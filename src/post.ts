@@ -11,6 +11,8 @@ async function run(): Promise<void> {
     const orgId = core.getInput('orgId');
     const apiKey = core.getInput('apiKey');
 
+    core.info("Stopping Enclave Agent...");    
+
     const enclavePidInfo = await getEnclavePidInfo();
 
     const enclaveInfo = await getEnclaveInfo(enclavePidInfo);
@@ -18,8 +20,6 @@ async function run(): Promise<void> {
     // Locate the stop script.
     var stopScript = path.join(__dirname, '..', '..', 'external', 'terminate-linux.sh');        
 
-    core.info("Stopping Enclave Agent...");
-    
     // Try to stop it.
     var exitCode = await exec(stopScript, [], { env: { ENCLAVE_PID: enclavePidInfo.pid.toString() } });
 

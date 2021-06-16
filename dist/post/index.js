@@ -2666,11 +2666,11 @@ function run() {
         try {
             const orgId = core.getInput('orgId');
             const apiKey = core.getInput('apiKey');
+            core.info("Stopping Enclave Agent...");
             const enclavePidInfo = yield runner_1.getEnclavePidInfo();
             const enclaveInfo = yield runner_1.getEnclaveInfo(enclavePidInfo);
             // Locate the stop script.
             var stopScript = path_1.default.join(__dirname, '..', '..', 'external', 'terminate-linux.sh');
-            core.info("Stopping Enclave Agent...");
             // Try to stop it.
             var exitCode = yield exec_1.exec(stopScript, [], { env: { ENCLAVE_PID: enclavePidInfo.pid.toString() } });
             if (exitCode === 0) {
