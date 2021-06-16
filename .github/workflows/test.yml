@@ -31,12 +31,6 @@ jobs:
         if: always()
         
       - name: Get status
-        run: |
-          export COREHOST_TRACE=1
-          whoami
-          # ls -la $HOME
-          # mkdir $HOME/.net
-          #env
-          enclave status
+        run:  enclave status
 
       - run: enclave waitfor discover.enclave.io
