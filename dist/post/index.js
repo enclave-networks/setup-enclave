@@ -2803,8 +2803,8 @@ function getEnclavePidInfo() {
             catch (err) {
                 core.error(err);
                 attemptCounter++;
-                if (attemptCounter < 3) {
-                    yield sleep(1000);
+                if (attemptCounter < 5) {
+                    yield sleep(4000);
                 }
                 else {
                     throw "Could not load PID file";

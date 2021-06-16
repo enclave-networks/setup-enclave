@@ -93,9 +93,9 @@ export async function getEnclavePidInfo() : Promise<IEnclavePid>
 
             attemptCounter++;
 
-            if (attemptCounter < 3)
+            if (attemptCounter < 5)
             {
-                await sleep(1000);
+                await sleep(4000);
             }
             else 
             {
