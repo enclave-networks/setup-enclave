@@ -4,6 +4,8 @@ set -euo pipefail
 
 echo -e "Spawning Enclave background process"
 
+chmod +x $ENCLAVE_BINARY
+
 # Launch enclave, daemonised.
 sudo -E $ENCLAVE_BINARY run
 
