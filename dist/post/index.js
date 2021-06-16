@@ -2669,7 +2669,8 @@ function run() {
             const enclavePidInfo = yield runner_1.getEnclavePidInfo();
             const enclaveInfo = yield runner_1.getEnclaveInfo(enclavePidInfo);
             // Locate the stop script.
-            var stopScript = path_1.default.join(__dirname, '..', '..', 'externals', 'terminate-linux.sh');
+            var stopScript = path_1.default.join(__dirname, '..', '..', 'external', 'terminate-linux.sh');
+            core.info("Stopping Enclave Agent...");
             // Try to stop it.
             var exitCode = yield exec_1.exec(stopScript, [], { env: { ENCLAVE_PID: enclavePidInfo.pid.toString() } });
             if (exitCode === 0) {
@@ -2724,7 +2725,7 @@ const child_process_1 = __webpack_require__(129);
 const fs_1 = __webpack_require__(747);
 const path_1 = __importDefault(__webpack_require__(622));
 ;
-function spawnEnclave(enclavePath, enrolmentKey) {
+function spawnEnclave(enrolmentKey) {
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve, reject) => {
             let envCopy = {};
@@ -2737,7 +2738,7 @@ function spawnEnclave(enclavePath, enrolmentKey) {
             }
             envCopy['ENCLAVE_ENROLMENT_KEY'] = enrolmentKey;
             // Locate the spawn script.
-            var spawnScript = path_1.default.join(__dirname, '..', '..', 'externals', 'spawn-linux.sh');
+            var spawnScript = path_1.default.join(__dirname, '..', '..', 'external', 'spawn-linux.sh');
             try {
                 var childProcess = child_process_1.spawn(spawnScript, {
                     env: envCopy,

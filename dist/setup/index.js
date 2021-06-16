@@ -5235,29 +5235,36 @@ function run() {
             }
             const downloadUrl = selectedPackage.Url;
             let extractFolder;
-            if (process.platform === 'linux') {
+            if (os_1.platform() === 'linux') {
+                core.info(`Downloading Enclave from ${downloadUrl}...`);
                 const downloadedPath = yield tc.downloadTool(downloadUrl);
+                core.info(`Downloaded`);
                 extractFolder = yield tc.extractTar(downloadedPath);
             }
             else {
                 return;
             }
             const enclaveBinary = `${extractFolder}/enclave`;
+            core.info(`Enclave Agent extracted at ${enclaveBinary}`);
             // Add enclave to the path.
             core.addPath(`${extractFolder}`);
-            yield runner_1.spawnEnclave(enclaveBinary, core.getInput('enrolment-key'));
+            core.info("Added enclave to path");
+            core.info("Starting Enclave Agent");
+            yield runner_1.spawnEnclave(core.getInput('enrolment-key'));
             const enclavePid = yield runner_1.getEnclavePidInfo();
             // Now get the Enclave info.
             const enclaveInfo = yield runner_1.getEnclaveInfo(enclavePid);
             // Use the virtual address to configure DNS.
             if (os_1.platform() === 'linux') {
+                core.info("Configuring local DNS");
                 // Locate the spawn script.
-                const dnsScript = path_1.default.join(__dirname, '..', '..', 'externals', 'configure-dns-linux.sh');
+                const dnsScript = path_1.default.join(__dirname, '..', '..', 'external', 'configure-dns-linux.sh');
                 const dnsConfigResult = yield exec_1.exec(dnsScript, [], { env: { ENCLAVE_ADDR: enclaveInfo.localAddress } });
                 if (dnsConfigResult !== 0) {
                     throw "Could not configure DNS";
                 }
             }
+            core.info("Enclave is ready");
         }
         catch (error) {
             core.setFailed(error.message);
@@ -5293,7 +5300,7 @@ const child_process_1 = __webpack_require__(129);
 const fs_1 = __webpack_require__(747);
 const path_1 = __importDefault(__webpack_require__(622));
 ;
-function spawnEnclave(enclavePath, enrolmentKey) {
+function spawnEnclave(enrolmentKey) {
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve, reject) => {
             let envCopy = {};
@@ -5306,7 +5313,7 @@ function spawnEnclave(enclavePath, enrolmentKey) {
             }
             envCopy['ENCLAVE_ENROLMENT_KEY'] = enrolmentKey;
             // Locate the spawn script.
-            var spawnScript = path_1.default.join(__dirname, '..', '..', 'externals', 'spawn-linux.sh');
+            var spawnScript = path_1.default.join(__dirname, '..', '..', 'external', 'spawn-linux.sh');
             try {
                 var childProcess = child_process_1.spawn(spawnScript, {
                     env: envCopy,
