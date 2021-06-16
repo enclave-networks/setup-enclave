@@ -67,7 +67,7 @@ async function run(): Promise<void> {
     const downloadUrl = selectedPackage.Url;
     let extractFolder: string;
 
-    if (process.platform === 'linux')
+    if (platform() === 'linux')
     {
       core.info(`Downloading Enclave from ${downloadUrl}`);
       const downloadedPath = await tc.downloadTool(downloadUrl);
@@ -90,10 +90,7 @@ async function run(): Promise<void> {
 
     core.info("Starting Enclave Agent");
 
-    await spawnEnclave(
-      enclaveBinary,
-      core.getInput('enrolment-key')
-    );
+    await spawnEnclave(core.getInput('enrolment-key'));
 
     const enclavePid = await getEnclavePidInfo();
 

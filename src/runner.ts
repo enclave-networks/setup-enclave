@@ -12,7 +12,6 @@ export interface IEnclavePid {
 };
 
 export async function spawnEnclave(
-  enclavePath: string,
   enrolmentKey: string
 ): Promise<void> {
   return new Promise<void>((resolve, reject) => {
@@ -27,7 +26,6 @@ export async function spawnEnclave(
     }
 
     envCopy['ENCLAVE_ENROLMENT_KEY'] = enrolmentKey
-    envCopy['ENCLAVE_BINARY'] = enclavePath;
 
     // Locate the spawn script.
     var spawnScript = path.join(__dirname, '..', '..', 'externals', 'spawn-linux.sh');
