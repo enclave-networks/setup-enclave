@@ -26,7 +26,9 @@
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.2.6",
-    "node-fetch": "^2.6.1",
+    "@actions/exec": "^1.1.0",
+    "@actions/http-client": "^1.0.11",
+    "@actions/tool-cache": "^1.7.1",
     "nodejs-file-downloader": "^4.6.0"
   },
   "devDependencies": {

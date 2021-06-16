@@ -1,10 +1,12 @@
 import * as core from '@actions/core'
+import * as tc from '@actions/tool-cache'
+import { HttpClient } from '@actions/http-client'
 import * as linux from './linux'
 import {platform} from 'os'
 import {IManifestFormat} from './manifestTypes'
-import {download} from './utils'
-import {spawnEnclave} from './runner'
-import fetch from 'node-fetch'
+import {getEnclaveInfo, getEnclavePidInfo, spawnEnclave} from './runner'
+import { exec } from '@actions/exec'
+import path from 'path'
 
 async function run(): Promise<void> {
   try {
@@ -32,10 +34,15 @@ async function run(): Promise<void> {
 
     core.info('Downloading manifest');
 
-    core.info(`Running as ${process.getuid()}:${process.getgid()}`);
+    const manifestClient = new HttpClient('enclave-setup');
+    
+    const downloadedManifest = (await manifestClient.getJson<IManifestFormat>(manifest)).result;
 
-    const downloadResult = await fetch(manifest);
-    const downloadedManifest: IManifestFormat = await downloadResult.json();
+    if (!downloadedManifest)
+    {
+      core.setFailed("Could not download manifest");
+      return;
+    }
     
     const version = downloadedManifest.ReleaseVersions.reverse().find(version => {
       return version.ReleaseType === releaseVersion
@@ -57,33 +64,58 @@ async function run(): Promise<void> {
       return;
     }
 
-    var downloadUrl = selectedPackage.Url;
+    const downloadUrl = selectedPackage.Url;
+    let extractFolder: string;
 
-    const urlParts = downloadUrl.split('/')
+    if (process.platform === 'linux')
+    {
+      const downloadedPath = await tc.downloadTool(downloadUrl);
 
-    const fileName = urlParts[urlParts.length - 1]
+      extractFolder = await tc.extractTar(downloadedPath);
+    }
+    else 
+    {
+      return;
+    }
 
-    const tmpPath = `${process.env.HOME}/${fileName}`
+    const enclaveBinary = `${extractFolder}/enclave`;
 
-    core.info(`Downloading Enclave from ${downloadUrl}...`)
+    // Add enclave to the path.
+    core.addPath(`${extractFolder}`);
 
-    // Now we need to download the file (this will be bigger, pipe it to disk).
-    await download(downloadUrl, tmpPath)
+    core.info("Added enclave to path");
 
-    // Now extract it.
-    const enclaveBinaryPath = await linux.extractPackage(
-      tmpPath,
-      `${process.env.HOME}`
-    )
+    core.info("Starting Enclave Agent");
 
-    const procId = await spawnEnclave(
-      enclaveBinaryPath,
+    await spawnEnclave(
+      enclaveBinary,
       core.getInput('enrolment-key')
-    )
+    );
 
-    core.saveState('ENCLAVE_PID', procId)
+    const enclavePid = await getEnclavePidInfo();
+
+    // Now get the Enclave info.
+    const enclaveInfo = await getEnclaveInfo(enclavePid);
+
+    // Use the virtual address to configure DNS.
+    if (platform() === 'linux')
+    {
+      core.info("Configuring local DNS");
+
+      // Locate the spawn script.
+      const dnsScript = path.join(__dirname, '..', '..', 'externals', 'configure-dns-linux.sh');
+      const dnsConfigResult = await exec(dnsScript, [], { env: { ENCLAVE_ADDR: enclaveInfo.localAddress } });
+
+      if (dnsConfigResult !== 0)
+      {
+        throw "Could not configure DNS";
+      }
+    }
+
+    core.info("Enclave is ready");
+
   } catch (error) {
-    core.setFailed(error.message)
+    core.setFailed(error.message);
   }
 }
 

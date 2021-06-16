@@ -15,11 +15,18 @@ jobs:
           npm install
       - run: |
           npm run all
-          
+
   test: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: ./
         with:
-          enrolment-key: 'ABCD'
+          channel: 'unstable'
+          enrolment-key: '${{secrets.TEST_ENROLMENT_KEY}}'
+          apiKey: '${{secrets.TEST_API_KEY}}'
+          orgId: 'a09a8d4dd4ea4c12a33a51e3effac9fa'
+
+      - run: enclave status
+
+      - run: enclave waitfor discover.enclave.io
