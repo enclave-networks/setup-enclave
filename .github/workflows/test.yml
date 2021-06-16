@@ -34,7 +34,6 @@ jobs:
         run: |
           export COREHOST_TRACE=1
           uname -a
-          ls -la /home/runner/work/_temp/enclave-launcher/enclave
           env
           enclave status
 
