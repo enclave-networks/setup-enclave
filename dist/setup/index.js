@@ -5250,7 +5250,7 @@ function run() {
             core.addPath(`${extractFolder}`);
             core.info("Added enclave to path");
             core.info("Starting enclave");
-            const enclaveSpawnExitCode = yield runner_1.spawnEnclave(core.getInput('enrolment-key'));
+            const enclaveSpawnExitCode = yield runner_1.spawnEnclave(enclaveBinary, core.getInput('enrolment-key'));
             if (enclaveSpawnExitCode !== 0) {
                 core.setFailed(`Failed to spawn enclave daemon: ${enclaveSpawnExitCode}`);
                 return;
@@ -5328,7 +5328,7 @@ const http_client_1 = __webpack_require__(925);
 const fs_1 = __webpack_require__(747);
 const path_1 = __importDefault(__webpack_require__(622));
 ;
-function spawnEnclave(enrolmentKey) {
+function spawnEnclave(enclaveBinary, enrolmentKey) {
     return __awaiter(this, void 0, void 0, function* () {
         let envCopy = {};
         let envName;
@@ -5339,6 +5339,7 @@ function spawnEnclave(enrolmentKey) {
             }
         }
         envCopy['ENCLAVE_ENROLMENT_KEY'] = enrolmentKey;
+        envCopy['ENCLAVE_BINARY'] = enclaveBinary;
         // Locate the spawn script.
         var spawnScript = path_1.default.join(__dirname, '..', '..', 'external', 'spawn-linux.sh');
         return yield exec_1.exec(spawnScript, [], { env: envCopy });

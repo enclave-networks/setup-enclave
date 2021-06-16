@@ -92,7 +92,7 @@ async function run(): Promise<void> {
 
     core.info("Starting enclave");
 
-    const enclaveSpawnExitCode = await spawnEnclave(core.getInput('enrolment-key'));
+    const enclaveSpawnExitCode = await spawnEnclave(enclaveBinary, core.getInput('enrolment-key'));
 
     if (enclaveSpawnExitCode !== 0)
     {
