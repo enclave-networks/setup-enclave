@@ -26,11 +26,13 @@
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.2.6",
+    "node-fetch": "^2.6.1",
     "nodejs-file-downloader": "^4.6.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.15",
     "@types/node": "^14.14.9",
+    "@types/node-fetch": "^2.5.10",
     "@typescript-eslint/parser": "^4.8.1",
     "@vercel/ncc": "^0.25.1",
     "eslint": "^7.17.0",

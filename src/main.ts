@@ -6,6 +6,8 @@ import { IManifestFormat } from './manifestTypes';
 import { download } from './utils';
 import { cpuUsage } from 'process';
 import { spawnEnclave } from './runner';
+import fetch from 'node-fetch';
+import { exec } from 'child_process';
 
 async function run(): Promise<void> {
   try {
@@ -34,6 +36,10 @@ async function run(): Promise<void> {
       return;
     }
 
+    core.info("Downloading manifest");
+
+    core.info(`Running as ${process.getuid()}:${process.getgid()}`);
+
     const downloadUrl = await fetch(manifest)
       .then(result => {
         return result.json();
@@ -54,6 +60,8 @@ async function run(): Promise<void> {
         {
           return null;
         }
+
+        core.info(`Using Enclave ${version.MajorVersion}.${version.MinorVersion}.${version.BuildVersion}.${version.RevisionVersion}`);
 
         return selectedPackage.Url;
       });
