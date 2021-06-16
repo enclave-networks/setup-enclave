@@ -5194,9 +5194,6 @@ const os_1 = __webpack_require__(87);
 const runner_1 = __webpack_require__(878);
 const exec_1 = __webpack_require__(514);
 const path_1 = __importDefault(__webpack_require__(622));
-const fs_1 = __webpack_require__(747);
-const io_1 = __webpack_require__(436);
-const fs_2 = __webpack_require__(747);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -5272,17 +5269,25 @@ function run() {
                     throw "Could not configure DNS";
                 }
             }
-            // Write shell script to temp folder that launches enclave, then add that folder to the path.
-            const script = `#!/bin/bash
-export DOTNET_BUNDLE_EXTRACT_BASE_DIR=${process.env.RUNNER_TEMP}/.net
-${enclaveBinary} "$@"
-`;
-            const scriptFolder = `${process.env.RUNNER_TEMP}/enclave-launcher`;
-            io_1.mkdirP(scriptFolder);
-            fs_1.writeFileSync(`${scriptFolder}/enclave`, script);
-            fs_2.chmodSync(`${scriptFolder}/enclave`, 755);
+            /*  // Write shell script to temp folder that launches enclave, then add that folder to the path.
+             const script =
+         `#!/bin/bash
+         export DOTNET_BUNDLE_EXTRACT_BASE_DIR=${process.env.RUNNER_TEMP}/.net
+         ${enclaveBinary} "$@"
+         `;
+         
+             const scriptFolder = `${process.env.RUNNER_TEMP}/enclave-launcher`;
+         
+             mkdirP(scriptFolder);
+         
+             core.info("Writing launcher script")
+         
+             writeFileSync(`${scriptFolder}/enclave`, script);
+         
+             chmodSync(`${scriptFolder}/enclave`, 755); */
             core.info("Adding enclave to path");
-            core.addPath(scriptFolder);
+            core.addPath(extractFolder);
+            exec_1.exec(`ls -la ${extractFolder}`);
             core.info("Enclave is ready");
         }
         catch (error) {

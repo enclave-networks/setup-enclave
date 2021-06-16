@@ -126,7 +126,7 @@ async function run(): Promise<void> {
       }
     }
 
-    // Write shell script to temp folder that launches enclave, then add that folder to the path.
+   /*  // Write shell script to temp folder that launches enclave, then add that folder to the path.
     const script = 
 `#!/bin/bash
 export DOTNET_BUNDLE_EXTRACT_BASE_DIR=${process.env.RUNNER_TEMP}/.net
@@ -137,13 +137,17 @@ ${enclaveBinary} "$@"
 
     mkdirP(scriptFolder);
 
+    core.info("Writing launcher script")
+
     writeFileSync(`${scriptFolder}/enclave`, script);
 
-    chmodSync(`${scriptFolder}/enclave`, 755);
+    chmodSync(`${scriptFolder}/enclave`, 755); */
 
     core.info("Adding enclave to path");
 
-    core.addPath(scriptFolder);
+    core.addPath(extractFolder);
+
+    exec(`ls -la ${extractFolder}`);
 
     core.info("Enclave is ready");
 
