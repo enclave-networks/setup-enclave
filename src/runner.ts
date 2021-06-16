@@ -13,7 +13,7 @@ export interface IEnclavePid {
 
 export async function spawnEnclave(
   enrolmentKey: string
-): Promise<void> {
+): Promise<number> {
 
     let envCopy: {[id: string]: string} = {}
     let envName: string
@@ -30,7 +30,7 @@ export async function spawnEnclave(
     // Locate the spawn script.
     var spawnScript = path.join(__dirname, '..', '..', 'external', 'spawn-linux.sh');
 
-    await exec(spawnScript, [], { env: envCopy });
+    return await exec(spawnScript, [], { env: envCopy });
 }
 
 export async function getEnclaveInfo(pidInfo: IEnclavePid): Promise<{id: string; localAddress: string}> {

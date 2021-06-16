@@ -90,9 +90,15 @@ async function run(): Promise<void> {
 
     core.info("Added enclave to path");
 
-    core.info("Starting Enclave Agent");
+    core.info("Starting enclave");
 
-    await spawnEnclave(core.getInput('enrolment-key'));
+    const enclaveSpawnExitCode = await spawnEnclave(core.getInput('enrolment-key'));
+
+    if (enclaveSpawnExitCode !== 0)
+    {
+      core.setFailed(`Failed to spawn enclave daemon: ${enclaveSpawnExitCode}`);
+      return;
+    }
 
     const enclavePid = await getEnclavePidInfo();
 

@@ -5249,8 +5249,12 @@ function run() {
             // Add enclave to the path.
             core.addPath(`${extractFolder}`);
             core.info("Added enclave to path");
-            core.info("Starting Enclave Agent");
-            yield runner_1.spawnEnclave(core.getInput('enrolment-key'));
+            core.info("Starting enclave");
+            const enclaveSpawnExitCode = yield runner_1.spawnEnclave(core.getInput('enrolment-key'));
+            if (enclaveSpawnExitCode !== 0) {
+                core.setFailed(`Failed to spawn enclave daemon: ${enclaveSpawnExitCode}`);
+                return;
+            }
             const enclavePid = yield runner_1.getEnclavePidInfo();
             // Now get the Enclave info.
             const enclaveInfo = yield runner_1.getEnclaveInfo(enclavePid);
@@ -5313,7 +5317,7 @@ function spawnEnclave(enrolmentKey) {
         envCopy['ENCLAVE_ENROLMENT_KEY'] = enrolmentKey;
         // Locate the spawn script.
         var spawnScript = path_1.default.join(__dirname, '..', '..', 'external', 'spawn-linux.sh');
-        yield exec_1.exec(spawnScript, [], { env: envCopy });
+        return yield exec_1.exec(spawnScript, [], { env: envCopy });
     });
 }
 exports.spawnEnclave = spawnEnclave;

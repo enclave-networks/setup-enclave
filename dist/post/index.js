@@ -2738,7 +2738,7 @@ function spawnEnclave(enrolmentKey) {
         envCopy['ENCLAVE_ENROLMENT_KEY'] = enrolmentKey;
         // Locate the spawn script.
         var spawnScript = path_1.default.join(__dirname, '..', '..', 'external', 'spawn-linux.sh');
-        yield exec_1.exec(spawnScript, [], { env: envCopy });
+        return yield exec_1.exec(spawnScript, [], { env: envCopy });
     });
 }
 exports.spawnEnclave = spawnEnclave;
