@@ -28,7 +28,7 @@ export async function spawnEnclave(
     envCopy['ENCLAVE_ENROLMENT_KEY'] = enrolmentKey
 
     // Locate the spawn script.
-    var spawnScript = path.join(__dirname, '..', '..', 'externals', 'spawn-linux.sh');
+    var spawnScript = path.join(__dirname, '..', '..', 'external', 'spawn-linux.sh');
 
     try {
       var childProcess = spawn(spawnScript, {

@@ -16,7 +16,7 @@ async function run(): Promise<void> {
     const enclaveInfo = await getEnclaveInfo(enclavePidInfo);
 
     // Locate the stop script.
-    var stopScript = path.join(__dirname, '..', '..', 'externals', 'terminate-linux.sh');        
+    var stopScript = path.join(__dirname, '..', '..', 'external', 'terminate-linux.sh');        
 
     core.info("Stopping Enclave Agent...");
     

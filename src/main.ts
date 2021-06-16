@@ -55,7 +55,7 @@ async function run(): Promise<void> {
 
     core.info(
       `Using Enclave ${version.MajorVersion}.${version.MinorVersion}.${version.BuildVersion}.${version.RevisionVersion}`
-    )
+    );
 
     const selectedPackage = linux.choosePackage(version?.Packages)
 
@@ -69,8 +69,10 @@ async function run(): Promise<void> {
 
     if (platform() === 'linux')
     {
-      core.info(`Downloading Enclave from ${downloadUrl}`);
+      core.info(`Downloading Enclave from ${downloadUrl}...`);
       const downloadedPath = await tc.downloadTool(downloadUrl);
+
+      core.info(`Downloaded`);
 
       extractFolder = await tc.extractTar(downloadedPath);
     }
@@ -103,7 +105,7 @@ async function run(): Promise<void> {
       core.info("Configuring local DNS");
 
       // Locate the spawn script.
-      const dnsScript = path.join(__dirname, '..', '..', 'externals', 'configure-dns-linux.sh');
+      const dnsScript = path.join(__dirname, '..', '..', 'external', 'configure-dns-linux.sh');
       const dnsConfigResult = await exec(dnsScript, [], { env: { ENCLAVE_ADDR: enclaveInfo.localAddress } });
 
       if (dnsConfigResult !== 0)
