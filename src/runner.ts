@@ -69,7 +69,7 @@ export async function getEnclaveInfo(
 
       throw new Error('Not ready');
     } catch (err) {
-      core.warning('Could not load enclave status yet...');
+      core.info('Could not load enclave status yet...');
 
       attemptCounter++;
 
@@ -95,7 +95,7 @@ export async function getEnclavePidInfo(): Promise<IEnclavePid> {
 
       return pidObject;
     } catch (err) {
-      core.warning('Could not read enclave PID yet...');
+      core.info('Could not read enclave PID yet...');
 
       attemptCounter++;
 
