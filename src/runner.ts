@@ -1,5 +1,5 @@
 import {exec, spawn} from 'child_process'
-import {readFile} from 'fs/promises'
+import {readFile} from 'fs'
 
 export async function spawnEnclave(
   enclavePath: string,
@@ -40,7 +40,9 @@ export function GetEnclaveInfo(
   return new Promise<{Id: string; LocalAddress: string}>(
     async (resolve, reject) => {
       // Read the profile json.
-      var enclaveProfile = await readFile('/etc/enclave/profiles/')
+      var enclaveProfile = readFile('/etc/enclave/profiles/', (err, data) => {
+
+      });
     }
   )
 }

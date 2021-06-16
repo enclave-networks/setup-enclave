@@ -2076,32 +2076,21 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.extractPackage = exports.choosePackage = void 0;
 const child_process_1 = __webpack_require__(129);
-const fs = __importStar(__webpack_require__(225));
+const fs = __importStar(__webpack_require__(747));
 function choosePackage(packages) {
     return packages.find(p => p.Architecture === 'X64') || null;
 }
 exports.choosePackage = choosePackage;
 function extractPackage(tmpPath, destFolder) {
-    return __awaiter(this, void 0, void 0, function* () {
-        child_process_1.execSync(`tar xf ${tmpPath} -C ${destFolder}`);
-        const target = `${destFolder}/enclave`;
-        yield fs.symlink(target, '/usr/bin/enclave');
-        yield fs.chown(target, 0, 0);
-        yield fs.chmod(target, 755);
-        return target;
-    });
+    child_process_1.execSync(`tar xf ${tmpPath} -C ${destFolder}`);
+    const target = `${destFolder}/enclave`;
+    fs.symlinkSync(target, '/usr/bin/enclave');
+    fs.chownSync(target, 0, 0);
+    fs.chmodSync(target, 755);
+    return target;
 }
 exports.extractPackage = extractPackage;
 
@@ -2226,7 +2215,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.GetEnclaveInfo = exports.spawnEnclave = void 0;
 const child_process_1 = __webpack_require__(129);
-const promises_1 = __webpack_require__(225);
+const fs_1 = __webpack_require__(747);
 function spawnEnclave(enclavePath, enrolmentKey) {
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve, reject) => {
@@ -2258,7 +2247,8 @@ exports.spawnEnclave = spawnEnclave;
 function GetEnclaveInfo(enclaveBinaryPath) {
     return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
         // Read the profile json.
-        var enclaveProfile = yield promises_1.readFile('/etc/enclave/profiles/');
+        var enclaveProfile = fs_1.readFile('/etc/enclave/profiles/', (err, data) => {
+        });
     }));
 }
 exports.GetEnclaveInfo = GetEnclaveInfo;
@@ -2361,14 +2351,6 @@ module.exports = require("child_process");;
 
 "use strict";
 module.exports = require("fs");;
-
-/***/ }),
-
-/***/ 225:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("fs/promises");;
 
 /***/ }),
 

@@ -13,26 +13,26 @@ async function run(): Promise<void> {
     if (channel !== 'stable' && channel !== 'unstable') {
       core.setFailed(
         "channel input variable can only be 'stable' or 'unstable'"
-      )
-      return
+      );
+      return;
     }
 
-    const releaseVersion = channel === 'stable' ? 'GA' : 'RC'
+    const releaseVersion = channel === 'stable' ? 'GA' : 'RC';
 
-    let manifest: string
+    let manifest: string;
 
     // Define inputs (Enrolment Key and API token)
     // Depending on platform, download the appropriate binaries (check the manifests to find the right one).
     if (platform() === 'linux') {
-      manifest = 'https://install.enclave.io/manifest/linux.json'
+      manifest = 'https://install.enclave.io/manifest/linux.json';
     } else {
-      core.setFailed('unsupported platform')
-      return
+      core.setFailed('unsupported platform');
+      return;
     }
 
-    core.info('Downloading manifest')
+    core.info('Downloading manifest');
 
-    core.info(`Running as ${process.getuid()}:${process.getgid()}`)
+    core.info(`Running as ${process.getuid()}:${process.getgid()}`);
 
     const downloadResult = await fetch(manifest);
     const downloadedManifest: IManifestFormat = await downloadResult.json();

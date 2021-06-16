@@ -1,5 +1,5 @@
 import {execSync} from 'child_process'
-import * as fs from 'fs/promises'
+import * as fs from 'fs'
 import {IManifestPackage} from './manifestTypes'
 
 export function choosePackage(
@@ -8,17 +8,17 @@ export function choosePackage(
   return packages.find(p => p.Architecture === 'X64') || null
 }
 
-export async function extractPackage(
+export function extractPackage(
   tmpPath: string,
   destFolder: string
-): Promise<string> {
+): string {
   execSync(`tar xf ${tmpPath} -C ${destFolder}`)
 
-  const target = `${destFolder}/enclave`
+  const target = `${destFolder}/enclave`;
 
-  await fs.symlink(target, '/usr/bin/enclave')
-  await fs.chown(target, 0, 0)
-  await fs.chmod(target, 755)
+  fs.symlinkSync(target,  '/usr/bin/enclave');
+  fs.chownSync(target, 0, 0);
+  fs.chmodSync(target, 755);
 
   return target
 }
