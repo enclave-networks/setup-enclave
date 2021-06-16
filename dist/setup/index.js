@@ -5274,10 +5274,10 @@ function run() {
             }
             // Write shell script to temp folder that launches enclave, then add that folder to the path.
             const script = `#!/bin/bash
-export DOTNET_BUNDLE_EXTRACT_BASE_DIR=${process.env.TMPDIR}/.net
+export DOTNET_BUNDLE_EXTRACT_BASE_DIR=${process.env.RUNNER_TEMP}/.net
 ${enclaveBinary} "$@"
 `;
-            const scriptFolder = `${process.env.TMPDIR}/enclave-launcher`;
+            const scriptFolder = `${process.env.RUNNER_TEMP}/enclave-launcher`;
             io_1.mkdirP(scriptFolder);
             fs_1.writeFileSync(`${scriptFolder}/enclave`, script);
             fs_2.chmodSync(`${scriptFolder}/enclave`, 755);
