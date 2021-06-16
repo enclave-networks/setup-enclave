@@ -32,8 +32,7 @@ jobs:
         
       - name: Get status
         run: |
-          env
-          whereis enclave          
+          export COREHOST_TRACE=1
           enclave status
 
       - run: enclave waitfor discover.enclave.io
