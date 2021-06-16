@@ -33,6 +33,7 @@ jobs:
       - name: Get status
         run: |
           export COREHOST_TRACE=1
+          ls -la /home/runner/work/_temp/enclave-launcher/enclave
           env
           enclave status
 
