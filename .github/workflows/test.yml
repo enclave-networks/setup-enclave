@@ -33,9 +33,7 @@ jobs:
       - name: Get status
         run: |
           export COREHOST_TRACE=1
-          ls -la $HOME
-
-          mkdir /home/runner/.net/enclave/
+          env
           enclave status
 
       - run: enclave waitfor discover.enclave.io

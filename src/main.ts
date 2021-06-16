@@ -7,6 +7,9 @@ import {IManifestFormat} from './manifestTypes'
 import {getEnclaveInfo, getEnclavePidInfo, spawnEnclave} from './runner'
 import { exec } from '@actions/exec'
 import path from 'path'
+import { writeFileSync } from 'fs'
+import { mkdirP } from '@actions/io'
+import { chmodSync } from 'fs'
 
 async function run(): Promise<void> {
   try {
@@ -85,11 +88,6 @@ async function run(): Promise<void> {
 
     core.info(`Enclave Agent extracted at ${enclaveBinary}`);
 
-    // Add enclave to the path.
-    core.addPath(`${extractFolder}`);
-
-    core.info("Added enclave to path");
-
     core.info("Starting enclave");
 
     const enclaveSpawnExitCode = await spawnEnclave(enclaveBinary, core.getInput('enrolment-key'));
@@ -128,7 +126,24 @@ async function run(): Promise<void> {
       }
     }
 
-    core.exportVariable("DOTNET_BUNDLE_EXTRACT_BASE_DIR", `${process.env.HOME}/.net`);
+    // Write shell script to temp folder that launches enclave, then add that folder to the path.
+    const script = 
+`#!/bin/bash
+export DOTNET_BUNDLE_EXTRACT_BASE_DIR=${process.env.TEMP}/.net
+${enclaveBinary} "$@"
+`;
+
+    const scriptFolder = `${process.env.TEMP}/enclave-launcher`;
+
+    mkdirP(scriptFolder);
+
+    writeFileSync(`${scriptFolder}/enclave`, script);
+
+    chmodSync(`${scriptFolder}/enclave`, 755);
+
+    core.info("Adding enclave to path");
+
+    core.addPath(scriptFolder);
 
     core.info("Enclave is ready");
 
