@@ -5246,6 +5246,8 @@ function run() {
             }
             const enclaveBinary = `${extractFolder}/enclave`;
             core.info(`Enclave Agent extracted at ${enclaveBinary}`);
+            core.info('Adding enclave to path');
+            core.addPath(extractFolder);
             core.info('Starting enclave');
             const enclaveSpawnExitCode = yield runner_1.spawnEnclave(enclaveBinary, core.getInput('enrolment-key'));
             if (enclaveSpawnExitCode !== 0) {
@@ -5271,8 +5273,6 @@ function run() {
                     throw new Error('Could not configure DNS');
                 }
             }
-            core.info('Adding enclave to path');
-            core.addPath(extractFolder);
             core.info('Enclave is ready');
         }
         catch (error) {
@@ -5355,6 +5355,7 @@ function getEnclaveInfo(pidInfo) {
                 // Now call the API to get the status.
                 const http = new http_client_1.HttpClient('enclave-actions');
                 const apiResponse = yield http.getJson(`${pidInfo.uri}/fabric/status`, authHeader);
+                core.info(JSON.stringify(apiResponse));
                 const status = apiResponse.result;
                 // Only when ready...
                 if (status && status.Profile.VirtualAddress) {
