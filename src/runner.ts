@@ -69,7 +69,7 @@ export async function getEnclaveInfo(
 
       throw new Error('Not ready');
     } catch (err) {
-      core.info('Could not load enclave status yet...');
+      core.info('Could not load enclave status yet... (' + err + ')');
 
       attemptCounter++;
 

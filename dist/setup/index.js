@@ -5366,7 +5366,7 @@ function getEnclaveInfo(pidInfo) {
                 throw new Error('Not ready');
             }
             catch (err) {
-                core.info('Could not load enclave status yet...');
+                core.info('Could not load enclave status yet... (' + err + ')');
                 attemptCounter++;
                 if (attemptCounter < 5) {
                     yield sleep(3000);
@@ -5387,7 +5387,7 @@ function getEnclavePidInfo() {
                 return pidObject;
             }
             catch (err) {
-                core.info('Could not read enclave PID yet...');
+                core.info('Could not read enclave PID yet... (' + err + ')');
                 attemptCounter++;
                 if (attemptCounter < 5) {
                     yield sleep(3000);
