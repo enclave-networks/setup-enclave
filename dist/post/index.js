@@ -2773,9 +2773,9 @@ function getEnclaveInfo(pidInfo) {
                 // Now call the API to get the status.
                 const http = new http_client_1.HttpClient('enclave-actions');
                 const requestUri = `${pidInfo.uri}fabric/status`;
-                core.info(`Querying ${requestUri}`);
+                core.debug(`Querying ${requestUri}`);
                 const apiResponse = yield http.getJson(requestUri, headers);
-                core.info(JSON.stringify(apiResponse));
+                core.debug(JSON.stringify(apiResponse));
                 const status = apiResponse.result;
                 // Only when ready...
                 if (status && status.Profile.VirtualAddress) {

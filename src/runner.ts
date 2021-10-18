@@ -54,14 +54,14 @@ export async function getEnclaveInfo(
 
       const requestUri = `${pidInfo.uri}fabric/status`;
 
-      core.info(`Querying ${requestUri}`);
+      core.debug(`Querying ${requestUri}`);
 
       const apiResponse = await http.getJson<FabricStatus>(
         requestUri,
         headers
       );
 
-      core.info(JSON.stringify(apiResponse));
+      core.debug(JSON.stringify(apiResponse));
 
       const status = apiResponse.result;      
 
