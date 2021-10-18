@@ -5354,7 +5354,9 @@ function getEnclaveInfo(pidInfo) {
                 const headers = { ['X-Auth-Token']: pidInfo.api_key, ['Content-Type']: 'application/json' };
                 // Now call the API to get the status.
                 const http = new http_client_1.HttpClient('enclave-actions');
-                const apiResponse = yield http.getJson(`${pidInfo.uri}/fabric/status`, headers);
+                const requestUri = `${pidInfo.uri}fabric/status`;
+                core.info(`Querying ${requestUri}`);
+                const apiResponse = yield http.getJson(requestUri, headers);
                 core.info(JSON.stringify(apiResponse));
                 const status = apiResponse.result;
                 // Only when ready...

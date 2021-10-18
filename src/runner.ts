@@ -52,8 +52,12 @@ export async function getEnclaveInfo(
       // Now call the API to get the status.
       const http: HttpClient = new HttpClient('enclave-actions');
 
+      const requestUri = `${pidInfo.uri}fabric/status`;
+
+      core.info(`Querying ${requestUri}`);
+
       const apiResponse = await http.getJson<FabricStatus>(
-        `${pidInfo.uri}/fabric/status`,
+        requestUri,
         headers
       );
 
