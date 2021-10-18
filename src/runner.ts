@@ -95,7 +95,7 @@ export async function getEnclavePidInfo(): Promise<IEnclavePid> {
 
       return pidObject;
     } catch (err) {
-      core.info('Could not read enclave PID yet...');
+      core.info('Could not read enclave PID yet... (' + err + ')');
 
       attemptCounter++;
 
