@@ -54,7 +54,7 @@ export interface Certificate {
   Version: number;
   SerialNumber: string;
   PermittedUse: number;
-  SubjectDistinguishedName: string;
+  subjectDistinguishedName: string;
   SubjectPublicKey: string;
   NotBefore: number;
   NotAfter: number;

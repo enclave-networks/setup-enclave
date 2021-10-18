@@ -5362,7 +5362,7 @@ function getEnclaveInfo(pidInfo) {
                 // Only when ready...
                 if (status && status.Profile.VirtualAddress) {
                     return {
-                        id: status.Profile.Certificate.SubjectDistinguishedName,
+                        id: status.Profile.Certificate.subjectDistinguishedName,
                         localAddress: status.Profile.VirtualAddress
                     };
                 }
