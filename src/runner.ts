@@ -47,14 +47,14 @@ export async function getEnclaveInfo(
   let attemptCounter = 0;
   while (attemptCounter < 5) {
     try {
-      const authHeader = {['X-Auth-Token']: pidInfo.api_key};
+      const headers = {['X-Auth-Token']: pidInfo.api_key, ['Content-Type']: 'application/json'};
 
       // Now call the API to get the status.
       const http: HttpClient = new HttpClient('enclave-actions');
 
       const apiResponse = await http.getJson<FabricStatus>(
         `${pidInfo.uri}/fabric/status`,
-        authHeader
+        headers
       );
 
       core.info(JSON.stringify(apiResponse));
