@@ -9,6 +9,6 @@ sudo chmod 755 $ENCLAVE_BINARY
 
 export DOTNET_BUNDLE_EXTRACT_BASE_DIR=$RUNNER_TEMP/enclave-daemon-extract
 # Launch enclave, daemonised.
-sudo -E $ENCLAVE_BINARY run
+sudo -E $ENCLAVE_BINARY run </dev/null &>/dev/null &
 
 echo -e "Enclave background process started"
