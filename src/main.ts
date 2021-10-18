@@ -82,6 +82,10 @@ async function run(): Promise<void> {
     const enclaveBinary = `${extractFolder}/enclave`;
 
     core.info(`Enclave Agent extracted at ${enclaveBinary}`);
+    
+    core.info('Adding enclave to path');
+
+    core.addPath(extractFolder);
 
     core.info('Starting enclave');
 
@@ -128,9 +132,6 @@ async function run(): Promise<void> {
         throw new Error('Could not configure DNS');
       }
     }
-    core.info('Adding enclave to path');
-
-    core.addPath(extractFolder);
 
     core.info('Enclave is ready');
   } catch (error) {
