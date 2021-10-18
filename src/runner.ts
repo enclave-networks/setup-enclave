@@ -57,7 +57,9 @@ export async function getEnclaveInfo(
         authHeader
       );
 
-      const status = apiResponse.result;
+      core.info(JSON.stringify(apiResponse));
+
+      const status = apiResponse.result;      
 
       // Only when ready...
       if (status && status.Profile.VirtualAddress) {
