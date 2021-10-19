@@ -32,7 +32,7 @@ You should define two secrets in your repository for use by the action.
 ```yaml
 # Setup enclave ready for signing
 - name: Setup Enclave
-  uses: enclave-alistair/enclave-setup-action@main
+  uses: enclave-networks/setup-enclave@v1
   with:
     # The enrolment key to 
     enrolment-key: ${{ secrets.ENCLAVE_ENROLMENT_KEY }}
