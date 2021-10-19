@@ -3,7 +3,7 @@ import {exec} from '@actions/exec';
 import {HttpClient} from '@actions/http-client';
 import {readFileSync} from 'fs';
 import path from 'path';
-import {FabricStatus} from './statusTypes';
+import {FabricStatus} from './status-types';
 
 export interface IEnclavePid {
   api_key: string;

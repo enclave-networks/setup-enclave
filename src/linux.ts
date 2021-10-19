@@ -1,4 +1,4 @@
-import {IManifestPackage} from './manifestTypes';
+import {IManifestPackage} from './manifest-types';
 
 export function choosePackage(
   packages: IManifestPackage[]
