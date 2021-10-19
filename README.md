@@ -1,5 +1,4 @@
-<a href="https://github.com/enclave-networks/enclave-setup-action/actions"><img alt="enclave-setup-action status" src="https://github.com/enclave-networks/enclave-setup-action/workflows/test/badge.svg"></a>
-
+[![build-test](https://github.com/enclave-networks/enclave-setup-action/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/enclave-networks/enclave-setup-action/actions/workflows/test.yml)
 # setup-enclave
 
 This action sets up your build runner with [Enclave](https://enclave.io), so your Actions runner can connect to your Enclave network resources.
