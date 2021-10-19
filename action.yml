@@ -1,8 +1,9 @@
-name: 'enclave-setup'
-description: 'Sets up Enclave in a GitHub action to allow connectivity to your Enclave network.'
+name: 'Setup Enclave'
+description: 'Sets up Enclave in a GitHub Action to allow connectivity to your Enclave network.'
 author: 'Enclave Networks'
-color: gray-dark
-icon: zap
+branding:
+  color: gray-dark
+  icon: zap
 inputs:
   channel:
     required: false
