@@ -1,4 +1,4 @@
-name: 'enclave-setup-action'
+name: 'enclave-setup'
 description: 'Sets up Enclave in a GitHub action to allow connectivity to your Enclave network.'
 author: 'Enclave Networks'
 inputs:
