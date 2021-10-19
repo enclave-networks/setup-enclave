@@ -47,7 +47,10 @@ export async function getEnclaveInfo(
   let attemptCounter = 0;
   while (attemptCounter < 5) {
     try {
-      const headers = {['X-Auth-Token']: pidInfo.api_key, ['Content-Type']: 'application/json'};
+      const headers = {
+        ['X-Auth-Token']: pidInfo.api_key,
+        ['Content-Type']: 'application/json'
+      };
 
       // Now call the API to get the status.
       const http: HttpClient = new HttpClient('enclave-actions');
@@ -56,14 +59,11 @@ export async function getEnclaveInfo(
 
       core.debug(`Querying ${requestUri}`);
 
-      const apiResponse = await http.getJson<FabricStatus>(
-        requestUri,
-        headers
-      );
+      const apiResponse = await http.getJson<FabricStatus>(requestUri, headers);
 
       core.debug(JSON.stringify(apiResponse));
 
-      const status = apiResponse.result;      
+      const status = apiResponse.result;
 
       // Only when ready...
       if (status && status.Profile.VirtualAddress) {
@@ -75,7 +75,7 @@ export async function getEnclaveInfo(
 
       throw new Error('Not ready');
     } catch (err) {
-      core.info('Could not load enclave status yet... (' + err + ')');
+      core.info(`Could not load enclave status yet... ${err})`);
 
       attemptCounter++;
 
@@ -101,7 +101,7 @@ export async function getEnclavePidInfo(): Promise<IEnclavePid> {
 
       return pidObject;
     } catch (err) {
-      core.info('Could not read enclave PID yet... (' + err + ')');
+      core.info(`Could not read enclave PID yet... (${err})`);
 
       attemptCounter++;
 

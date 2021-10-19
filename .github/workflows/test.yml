@@ -30,8 +30,6 @@ jobs:
       - run: cat /var/log/enclave/*
         if: always()
         
-      - run: enclave waitfor test-server-for-gh-setup.enclave
-
       - name: Get status
         run: enclave status
         

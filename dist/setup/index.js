@@ -5351,7 +5351,10 @@ function getEnclaveInfo(pidInfo) {
         let attemptCounter = 0;
         while (attemptCounter < 5) {
             try {
-                const headers = { ['X-Auth-Token']: pidInfo.api_key, ['Content-Type']: 'application/json' };
+                const headers = {
+                    ['X-Auth-Token']: pidInfo.api_key,
+                    ['Content-Type']: 'application/json'
+                };
                 // Now call the API to get the status.
                 const http = new http_client_1.HttpClient('enclave-actions');
                 const requestUri = `${pidInfo.uri}fabric/status`;
@@ -5369,7 +5372,7 @@ function getEnclaveInfo(pidInfo) {
                 throw new Error('Not ready');
             }
             catch (err) {
-                core.info('Could not load enclave status yet... (' + err + ')');
+                core.info(`Could not load enclave status yet... ${err})`);
                 attemptCounter++;
                 if (attemptCounter < 5) {
                     yield sleep(3000);
@@ -5390,7 +5393,7 @@ function getEnclavePidInfo() {
                 return pidObject;
             }
             catch (err) {
-                core.info('Could not read enclave PID yet... (' + err + ')');
+                core.info(`Could not read enclave PID yet... (${err})`);
                 attemptCounter++;
                 if (attemptCounter < 5) {
                     yield sleep(3000);

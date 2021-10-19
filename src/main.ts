@@ -82,7 +82,7 @@ async function run(): Promise<void> {
     const enclaveBinary = `${extractFolder}/enclave`;
 
     core.info(`Enclave Agent extracted at ${enclaveBinary}`);
-    
+
     core.info('Adding enclave to path');
 
     core.addPath(extractFolder);
