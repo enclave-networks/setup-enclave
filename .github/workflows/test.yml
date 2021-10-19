@@ -32,5 +32,3 @@ jobs:
         
       - name: Get status
         run: enclave status
-        
-      - run: curl http://test-server-for-gh-setup.enclave
