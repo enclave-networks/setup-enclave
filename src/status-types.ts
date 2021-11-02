@@ -1,115 +1,107 @@
 export interface FabricStatus {
-  BindingAddress: string;
-  Capabilities: CapabilitiesEntity[];
-  TapInterfaceIndex: number;
-  TapInterfacePhysicalAddress: string;
-  TapInterfaceName: string;
-  Profile: Profile;
-  Policy: Policy;
-  Peers: PeersEntity[];
+  bindingAddress: string;
+  capabilities: Capability[];
+  tapInterfaceIndex: number;
+  tapInterfacePhysicalAddress: string;
+  tapInterfaceName: string;
+  logFileName: string;
+  profile: Profile;
+  policy: Policy;
+  peers: Peer[];
 }
 
-export interface CapabilitiesEntity {
-  Author: string;
-  Copyright: string;
-  Compatibility?: string[] | null;
-  Description: string;
-  IconUrl: string;
-  Id: string;
-  IsEnabled: boolean;
-  IsFaulted: boolean;
-  Languages?: string[] | null;
-  License: string;
-  LicenseUrl?: null;
-  Owner: string;
-  PluginType: string;
-  Priority: number;
-  ProjectUrl: string;
-  State: string;
-  Tags?: string[] | null;
-  Title: string;
-  Version: string;
+export interface Capability {
+  title: string;
+  isFaulted: boolean;
+  state: string;
 }
-export interface Profile {
-  AuthorisedPeers?: null[] | null;
-  Certificate: Certificate;
-  FilePath: string;
-  DesiredState: number;
-  ConnectTimeout: number;
-  Guid: string;
-  LocalNameserver: string;
-  LocalPort: number;
-  PersistentKeepaliveInterval: number;
-  ProfileName: string;
-  TapAdapterGuid: string;
-  UPnPEnabled: boolean;
-  VirtualAddress?: string | null;
-  VirtualSubnetMask: string;
-  VirtualNetwork?: string | null;
-  Description: string;
-  Hostnames: string[] | null;
-  ExitNodeFor?: string[] | null;
+
+export interface Peer {
+  connectionCandidates: ConnectionCandidate[];
+  macAddress: string;
+  tunnel: Tunnel;
+  certificate: Certificate;
+  description: string;
+  guid: string;
+  hostnames: string[];
+  isAdministrativelyDown: boolean;
+  millisecondsSinceLastActivity: number;
+  maximumSendRate: number;
+  maximumReceiveRate: number;
+  name: string;
+  pinnedPublicKey: string;
+  roundTripTime: number;
+  subscriptionState: number;
+  type: number;
+  virtualAddress: null;
+  virtualSubnetMask: null;
+  virtualNetwork: null;
+  exitNodeFor: string[];
 }
+
 export interface Certificate {
-  Version: number;
-  SerialNumber: string;
-  PermittedUse: number;
+  version: number;
+  serialNumber: string;
+  permittedUse: number;
   subjectDistinguishedName: string;
-  SubjectPublicKey: string;
-  NotBefore: number;
-  NotAfter: number;
-  IssuerDistinguishedName: string;
-  IssuerPublicKey: string;
-  Signature: string;
+  subjectPublicKey: string;
+  notBefore: number;
+  notAfter: number;
+  issuerDistinguishedName: string;
+  issuerPublicKey: string;
+  signature: string;
 }
-export interface Policy {
-  Status: number;
-  IsCentrallyManaged: boolean;
-  Tags?: null[] | null;
+
+export interface ConnectionCandidate {
+  endPoint: string;
+  type: number;
 }
-export interface PeersEntity {
-  ConnectionCandidates?: ConnectionCandidatesEntity[] | null;
-  MacAddress?: null;
-  Tunnel: Tunnel;
-  Certificate: Certificate;
-  Description: string;
-  Guid: string;
-  Hostnames?: null[] | null;
-  IsAdministrativelyDown: boolean;
-  MillisecondsSinceLastActivity: number;
-  MaximumSendRate: number;
-  MaximumReceiveRate: number;
-  Name: string;
-  PinnedPublicKey: string;
-  RoundTripTime: number;
-  SubscriptionState: number;
-  Type: number;
-  VirtualAddress?: null;
-  VirtualSubnetMask?: null;
-  VirtualNetwork?: null;
-  ExitNodeFor?: null[] | null;
-}
-export interface ConnectionCandidatesEntity {
-  EndPoint: string;
-  Type: number;
-}
+
 export interface Tunnel {
-  Age: number;
-  BytesInDelta: number;
-  BytesOutDelta: number;
-  Certificate: Certificate;
-  Created: string;
-  FramesInDelta: number;
-  FramesOutDelta: number;
-  LocalEndPoint: string;
-  MaximumReceiveRate: number;
-  MaximumSendRate: number;
-  ProtocolEndPoint: string;
-  ProtocolType: number;
-  SubscriptionState: number;
-  TotalBytesIn: number;
-  TotalBytesOut: number;
-  TotalFramesIn: number;
-  TotalFramesOut: number;
-  Type: number;
+  age: number;
+  bytesInDelta: number;
+  bytesOutDelta: number;
+  certificate: Certificate;
+  created: Date;
+  framesInDelta: number;
+  framesOutDelta: number;
+  localEndPoint: string;
+  maximumReceiveRate: number;
+  maximumSendRate: number;
+  protocolEndPoint: string;
+  protocolType: number;
+  subscriptionState: number;
+  totalBytesIn: number;
+  totalBytesOut: number;
+  totalFramesIn: number;
+  totalFramesOut: number;
+  type: number;
+}
+
+export interface Policy {
+  status: number;
+  isCentrallyManaged: boolean;
+  tags: string[];
+}
+
+export interface Profile {
+  certificate: Certificate;
+  filePath: null;
+  desiredState: number;
+  connectTimeout: number;
+  guid: string;
+  localNameserver: string;
+  nameServerIsBound: boolean;
+  localPort: number;
+  persistentKeepaliveInterval: number;
+  currentPingInterval: number;
+  profileName: string;
+  tapAdapterGuid: string;
+  uPnPEnabled: boolean;
+  virtualAddress: string;
+  virtualSubnetMask: string;
+  virtualNetwork: string;
+  description: string;
+  hostnames: string[];
+  exitNodeFor: string[];
 }

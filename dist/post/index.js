@@ -2970,10 +2970,10 @@ function getEnclaveInfo(pidInfo) {
                 core.debug(JSON.stringify(apiResponse));
                 const status = apiResponse.result;
                 // Only when ready...
-                if (status && status.Profile.VirtualAddress) {
+                if (status && status.profile.virtualAddress) {
                     return {
-                        id: status.Profile.Certificate.subjectDistinguishedName,
-                        localAddress: status.Profile.VirtualAddress
+                        id: status.profile.certificate.subjectDistinguishedName,
+                        localAddress: status.profile.virtualAddress
                     };
                 }
                 throw new Error('Not ready');
