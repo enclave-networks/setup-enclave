@@ -12,12 +12,6 @@ inputs:
   enrolment-key:
     required: true
     description: 'The enrolment key to use when enrolling the system'
-  orgId:
-    required: true
-    description: 'The organisation ID for your Enclave Organisation.'
-  apiKey:
-    required: true
-    description: 'An API key used to remove the system from your Enclave account when the job ends.'
 runs:
   using: 'node12'
   main: 'dist/setup/index.js'

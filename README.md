@@ -8,24 +8,20 @@ ports or reconfiguring your network.
 
 This action automatically:
 
-- Installs the latest version of Enclave, 
+- Installs the latest version of Enclave,
 - Enrols the runner using one of your [Enrolment Keys](https://portal.enclave.io/my/keys).
-- Automatically removes the enrolled system from your account at the end of the run.
 
 > The current version of this action only supports Linux runners. Windows and MacOS runner support is coming soon.
 
 See our [documentation](https://docs.enclave.io) for general instructions on using Enclave.
 
-## Secrets
+## Enrolment Key Secret
 
-You should define two secrets in your repository for use by the action.
+You should define a secret in your repository, `ENCLAVE_ENROLMENT_KEY` for use by the action.
 
-- `ENCLAVE_ENROLMENT_KEY` : 
-    Containing the enrolment key you wish to bring systems into your organisation with. 
-    If you apply tags to this key, you can define the policy your systems will obey when they are enrolled.
+This secret contains the enrolment key you wish to bring systems into your organisation with. It should be an Ephemeral Enrolment Key.
 
-- `ENCLAVE_API_KEY` : 
-    Containing a personal access token with rights to your account. This is used to remove the enrolled system at the end of the run.
+If you apply tags to this key, you can define the policy your systems will obey when they are enrolled.
 
 ## Example Usage
 
@@ -34,14 +30,8 @@ You should define two secrets in your repository for use by the action.
 - name: Setup Enclave
   uses: enclave-networks/setup-enclave@v1
   with:
-    # The enrolment key to 
+    # The enrolment key to enrol with (should be an Ephemeral key)
     enrolment-key: ${{ secrets.ENCLAVE_ENROLMENT_KEY }}
-
-    # We need the orgId and API key in order to revoke the system at
-    # the end of the run, so we don't use up your available systems.
-    # When Ephemeral Systems is released in November 2021 this won't be needed.
-    orgId: <your organisation ID here>
-    apiKey: ${{ secrets.ENCLAVE_API_KEY }}
  
 # The enclave binary is placed on the path.
 # Use the waitfor verb to pause until an Enclave connection is established to

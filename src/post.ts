@@ -1,15 +1,10 @@
 import * as core from '@actions/core';
 import {exec} from '@actions/exec';
-import {HttpClient} from '@actions/http-client';
-import * as httpAuth from '@actions/http-client/auth';
 import path from 'path';
 import {getEnclaveInfo, getEnclavePidInfo} from './runner';
 
 async function run(): Promise<void> {
   try {
-    const orgId = core.getInput('orgId');
-    const apiKey = core.getInput('apiKey');
-
     core.info('Stopping Enclave Agent...');
 
     const enclavePidInfo = await getEnclavePidInfo();
@@ -36,23 +31,6 @@ async function run(): Promise<void> {
       core.error(
         `Could not gracefully stop Enclave Agent. Exit code: ${exitCode}.`
       );
-    }
-
-    const bearerHandler = new httpAuth.BearerCredentialHandler(apiKey);
-
-    const httpClient = new HttpClient('enclave-setup', [bearerHandler]);
-
-    core.info('Revoking the Enclave System from your account...');
-
-    const result = await httpClient.del(
-      `https://api.enclave.io/org/${orgId}/systems/${enclaveInfo.id}`
-    );
-
-    if (result.message.statusCode === 200) {
-      core.info('Successfully revoked Enclave System from your account');
-    } else {
-      core.error('Failed to revoke Enclave System from your account:');
-      core.error(await result.readBody());
     }
   } catch (error) {
     core.setFailed(error.message);
