@@ -1,15 +1,13 @@
 import * as core from '@actions/core';
 import {exec} from '@actions/exec';
 import path from 'path';
-import {getEnclaveInfo, getEnclavePidInfo} from './runner';
+import {getEnclavePidInfo} from './runner';
 
 async function run(): Promise<void> {
   try {
     core.info('Stopping Enclave Agent...');
 
     const enclavePidInfo = await getEnclavePidInfo();
-
-    const enclaveInfo = await getEnclaveInfo(enclavePidInfo);
 
     // Locate the stop script.
     const stopScript = path.join(
