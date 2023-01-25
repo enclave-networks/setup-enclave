@@ -66,10 +66,10 @@ export async function getEnclaveInfo(
       const status = apiResponse.result;
 
       // Only when ready...
-      if (status && status.profile.virtualAddress) {
+      if (status && status.Profile.VirtualAddress) {
         return {
-          id: status.profile.certificate.subjectDistinguishedName,
-          localAddress: status.profile.virtualAddress
+          id: status.Profile.Certificate.subjectDistinguishedName,
+          localAddress: status.Profile.VirtualAddress
         };
       }
 

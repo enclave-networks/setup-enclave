@@ -1,42 +1,42 @@
 export interface FabricStatus {
-  bindingAddress: string;
-  capabilities: Capability[];
-  tapInterfaceIndex: number;
-  tapInterfacePhysicalAddress: string;
-  tapInterfaceName: string;
-  logFileName: string;
-  profile: Profile;
-  policy: Policy;
-  peers: Peer[];
+  BindingAddress: string;
+  Capabilities: Capability[];
+  TapInterfaceIndex: number;
+  TapInterfacePhysicalAddress: string;
+  TapInterfaceName: string;
+  LogFileName: string;
+  Profile: Profile;
+  Policy: Policy;
+  Peers: Peer[];
 }
 
 export interface Capability {
-  title: string;
-  isFaulted: boolean;
-  state: string;
+  Title: string;
+  IsFaulted: boolean;
+  State: string;
 }
 
 export interface Peer {
-  connectionCandidates: ConnectionCandidate[];
-  macAddress: string;
-  tunnel: Tunnel;
-  certificate: Certificate;
-  description: string;
-  guid: string;
-  hostnames: string[];
-  isAdministrativelyDown: boolean;
-  millisecondsSinceLastActivity: number;
-  maximumSendRate: number;
-  maximumReceiveRate: number;
-  name: string;
-  pinnedPublicKey: string;
-  roundTripTime: number;
-  subscriptionState: number;
-  type: number;
-  virtualAddress: null;
-  virtualSubnetMask: null;
-  virtualNetwork: null;
-  exitNodeFor: string[];
+  ConnectionCandidates: ConnectionCandidate[];
+  MacAddress: string;
+  Tunnel: Tunnel;
+  Certificate: Certificate;
+  Description: string;
+  Guid: string;
+  Hostnames: string[];
+  IsAdministrativelyDown: boolean;
+  MillisecondsSinceLastActivity: number;
+  MaximumSendRate: number;
+  MaximumReceiveRate: number;
+  Name: string;
+  PinnedPublicKey: string;
+  RoundTripTime: number;
+  SubscriptionState: number;
+  Type: number;
+  VirtualAddress: null;
+  VirtualSubnetMask: null;
+  VirtualNetwork: null;
+  ExitNodeFor: string[];
 }
 
 export interface Certificate {
@@ -53,29 +53,29 @@ export interface Certificate {
 }
 
 export interface ConnectionCandidate {
-  endPoint: string;
-  type: number;
+  EndPoint: string;
+  Type: number;
 }
 
 export interface Tunnel {
-  age: number;
-  bytesInDelta: number;
-  bytesOutDelta: number;
-  certificate: Certificate;
-  created: Date;
-  framesInDelta: number;
-  framesOutDelta: number;
-  localEndPoint: string;
-  maximumReceiveRate: number;
-  maximumSendRate: number;
-  protocolEndPoint: string;
-  protocolType: number;
-  subscriptionState: number;
-  totalBytesIn: number;
-  totalBytesOut: number;
-  totalFramesIn: number;
-  totalFramesOut: number;
-  type: number;
+  Age: number;
+  BytesInDelta: number;
+  BytesOutDelta: number;
+  Certificate: Certificate;
+  Created: Date;
+  FramesInDelta: number;
+  FramesOutDelta: number;
+  LocalEndPoint: string;
+  MaximumReceiveRate: number;
+  MaximumSendRate: number;
+  ProtocolEndPoint: string;
+  ProtocolType: number;
+  SubscriptionState: number;
+  TotalBytesIn: number;
+  TotalBytesOut: number;
+  TotalFramesIn: number;
+  TotalFramesOut: number;
+  Type: number;
 }
 
 export interface Policy {
@@ -85,23 +85,23 @@ export interface Policy {
 }
 
 export interface Profile {
-  certificate: Certificate;
-  filePath: null;
-  desiredState: number;
-  connectTimeout: number;
-  guid: string;
-  localNameserver: string;
-  nameServerIsBound: boolean;
-  localPort: number;
-  persistentKeepaliveInterval: number;
-  currentPingInterval: number;
-  profileName: string;
-  tapAdapterGuid: string;
-  uPnPEnabled: boolean;
-  virtualAddress: string;
-  virtualSubnetMask: string;
-  virtualNetwork: string;
-  description: string;
-  hostnames: string[];
-  exitNodeFor: string[];
+  Certificate: Certificate;
+  FilePath: null;
+  DesiredState: number;
+  ConnectTimeout: number;
+  Guid: string;
+  LocalNameserver: string;
+  NameServerIsBound: boolean;
+  LocalPort: number;
+  PersistentKeepaliveInterval: number;
+  CurrentPingInterval: number;
+  ProfileName: string;
+  TapAdapterGuid: string;
+  UPnPEnabled: boolean;
+  VirtualAddress: string;
+  VirtualSubnetMask: string;
+  VirtualNetwork: string;
+  Description: string;
+  Hostnames: string[];
+  ExitNodeFor: string[];
 }
