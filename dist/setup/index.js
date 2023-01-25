@@ -5453,18 +5453,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__webpack_require__(186));
 const tc = __importStar(__webpack_require__(784));
 const linux = __importStar(__webpack_require__(977));
 const runner_1 = __webpack_require__(878);
-const exec_1 = __webpack_require__(514);
 const http_client_1 = __webpack_require__(925);
 const os_1 = __webpack_require__(87);
-const path_1 = __importDefault(__webpack_require__(622));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -5532,18 +5527,6 @@ function run() {
             // Now get the Enclave info.
             const enclaveInfo = yield runner_1.getEnclaveInfo(enclavePid);
             core.debug(`Enclave Status Info: ${JSON.stringify(enclaveInfo)}`);
-            // Use the virtual address to configure DNS.
-            if (os_1.platform() === 'linux') {
-                core.info('Configuring local DNS');
-                // Locate the spawn script.
-                const dnsScript = path_1.default.join(__dirname, '..', '..', 'external', 'configure-dns-linux.sh');
-                const dnsConfigResult = yield exec_1.exec(dnsScript, [], {
-                    env: { ENCLAVE_ADDR: enclaveInfo.localAddress }
-                });
-                if (dnsConfigResult !== 0) {
-                    throw new Error('Could not configure DNS');
-                }
-            }
             core.info('Enclave is ready');
         }
         catch (error) {

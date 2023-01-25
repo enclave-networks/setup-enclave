@@ -112,27 +112,6 @@ async function run(): Promise<void> {
 
     core.debug(`Enclave Status Info: ${JSON.stringify(enclaveInfo)}`);
 
-    // Use the virtual address to configure DNS.
-    if (platform() === 'linux') {
-      core.info('Configuring local DNS');
-
-      // Locate the spawn script.
-      const dnsScript = path.join(
-        __dirname,
-        '..',
-        '..',
-        'external',
-        'configure-dns-linux.sh'
-      );
-      const dnsConfigResult = await exec(dnsScript, [], {
-        env: {ENCLAVE_ADDR: enclaveInfo.localAddress}
-      });
-
-      if (dnsConfigResult !== 0) {
-        throw new Error('Could not configure DNS');
-      }
-    }
-
     core.info('Enclave is ready');
   } catch (error) {
     core.setFailed(error.message);
