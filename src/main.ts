@@ -2,11 +2,9 @@ import * as core from '@actions/core';
 import * as tc from '@actions/tool-cache';
 import * as linux from './linux';
 import {getEnclaveInfo, getEnclavePidInfo, spawnEnclave} from './runner';
-import {exec} from '@actions/exec';
 import {HttpClient} from '@actions/http-client';
 import {IManifestFormat} from './manifest-types';
 import {platform} from 'os';
-import path from 'path';
 
 async function run(): Promise<void> {
   try {
